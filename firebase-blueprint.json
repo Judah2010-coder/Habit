@@ -1,0 +1,90 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "User account statistics, currencies, settings, and general info",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique Firebase User ID" },
+        "email": { "type": "string", "description": "User Email" },
+        "displayName": { "type": "string", "description": "User display name" },
+        "photoURL": { "type": "string", "description": "User avatar picture URL" },
+        "xp": { "type": "integer", "description": "Total user experience points" },
+        "crystals": { "type": "integer", "description": "Total micro-crystals/tokens balance" },
+        "perfectDays": { "type": "integer", "description": "Perfect Days cycles completed" },
+        "bestStreak": { "type": "integer", "description": "All time high streak" },
+        "purchasedItems": { "type": "array", "description": "Identifiers of cosmetics purchased in shop" },
+        "visualMode": { "type": "string", "description": "Theme choice (dark or light)" },
+        "neuralComms": { "type": "boolean", "description": "Neural communications alerts flag" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "UserHabit": {
+      "title": "User Habit",
+      "description": "Habit item tracked by the user that delivers XP and damage to threat",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique habit ID" },
+        "name": { "type": "string", "description": "Name/description of the habit" },
+        "category": { "type": "string", "description": "Habit category: mind, health, skill" },
+        "difficulty": { "type": "string", "description": "Difficulty: easy, medium, hard" },
+        "streak": { "type": "integer", "description": "Current active streak of consecutive days completed" },
+        "highStreak": { "type": "integer", "description": "All time high steak for this habit" },
+        "completions": { "type": "integer", "description": "Total completions on this habit" },
+        "lastCompletedYMD": { "type": "string", "description": "YYYY-MM-DD representation of the last completed date" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "category", "difficulty"]
+    },
+    "UserThreat": {
+      "title": "User Threat",
+      "description": "Details of threat/boss engaged by the user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique threat/boss ID" },
+        "name": { "type": "string", "description": "Name of the threat" },
+        "level": { "type": "integer", "description": "Threat level indicator" },
+        "integrity": { "type": "integer", "description": "Current health points (HP) of threat" },
+        "maxIntegrity": { "type": "integer", "description": "Maximum health points (HP)" },
+        "unlocked": { "type": "boolean", "description": "Flag representing whether threat level is unlocked" },
+        "defeated": { "type": "boolean", "description": "Flag representing if threat is defeated" },
+        "xpUnlockRequirement": { "type": "integer", "description": "XP required to unlock this threat" }
+      },
+      "required": ["id", "name", "integrity", "maxIntegrity"]
+    },
+    "UserLog": {
+      "title": "User Log",
+      "description": "Historical log tracking operations performed, completions, rewards, and system adjustments",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string", "description": "Type of log: completion, purchase, system" },
+        "title": { "type": "string", "description": "Summarized text description of log" },
+        "xpEarned": { "type": "integer" },
+        "crystalsChange": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "type", "title", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profiles collection linking directly to userId"
+    },
+    "/users/{userId}/habits/{habitId}": {
+      "schema": "UserHabit",
+      "description": "Individual habits of the authenticated user"
+    },
+    "/users/{userId}/threats/{threatId}": {
+      "schema": "UserThreat",
+      "description": "Track the user-specific integrity/defeat state of orbital threats"
+    },
+    "/users/{userId}/logs/{logId}": {
+      "schema": "UserLog",
+      "description": "Personal chronometer logs detailing habit completion and crystal expenditure"
+    }
+  }
+}

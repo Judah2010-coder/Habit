@@ -1,0 +1,2686 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Habit Hustle &bull; Command Cockpit</title>
+    <!-- CSS and Font CDN Links -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <!-- Tailwind Layout Engine Configuration -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Geist", "ui-sans-serif", "system-ui", "sans-serif"],
+              display: ["Space Grotesk", "sans-serif"],
+              mono: ["JetBrains Mono", "ui-monospace", "SFMono-Regular", "monospace"]
+            },
+            colors: {
+              primary: 'var(--primary)',
+              secondary: 'var(--secondary)',
+              tertiary: 'var(--tertiary)',
+              background: 'var(--background)',
+              surface: 'var(--surface)',
+              error: 'var(--error)',
+              'on-primary': 'var(--on-primary)',
+              'on-secondary': 'var(--on-secondary)',
+              'on-tertiary': 'var(--on-tertiary)',
+              'on-background': 'var(--on-background)',
+              'on-surface': 'var(--on-surface)',
+              'outline': 'var(--outline)',
+              'outline-variant': 'var(--outline-variant)',
+              'surface-container-lowest': 'var(--surface-container-lowest)',
+              'surface-container-low': 'var(--surface-container-low)',
+              'surface-container': 'var(--surface-container)',
+              'surface-container-high': 'var(--surface-container-high)',
+              'surface-container-highest': 'var(--surface-container-highest)',
+              'primary-container': 'var(--primary-container)',
+              'secondary-container': 'var(--secondary-container)',
+              'on-secondary-container': 'var(--on-secondary-container)',
+              'on-primary-container': 'var(--on-primary-container)',
+            },
+            padding: { margin: '1rem' }
+          }
+        }
+      }
+    </script>
+    <!-- Embedded Custom Utility CSS Properties -->
+    <style>
+      :root {
+        --primary: #adc6ff;
+        --secondary: #d9bbf1;
+        --tertiary: #ffb597;
+        --background: #121317;
+        --surface: #121317;
+        --on-background: #e3e2e7;
+        --on-surface: #e3e2e7;
+        --on-surface-variant: #c4c6d0;
+        --outline: #8e909a;
+        --outline-variant: #44474f;
+        --surface-container-lowest: #0d0e11;
+        --surface-container-low: #1a1b1f;
+        --surface-container: #1e1f23;
+        --surface-container-high: #292a2e;
+        --surface-container-highest: #343538;
+        --primary-container: #002455;
+        --secondary-container: #573f6c;
+        --on-secondary-container: #cbade2;
+        --on-primary-container: #738dc3;
+        --error: #ffb4ab;
+      }
+      body.light {
+        --background: #f4f5f9;
+        --on-background: #1a1b1f;
+        --surface: #ffffff;
+        --on-surface: #1a1b1f;
+        --surface-container-lowest: #fcfdfe;
+        --surface-container-low: #f0f1f5;
+        --surface-container: #ebedf2;
+        --surface-container-high: #e2e4eb;
+        --surface-container-highest: #dadde5;
+        --outline-variant: #c4c6cf;
+        --on-surface-variant: #44474f;
+      }
+      body {
+        background-color: var(--background);
+        color: var(--on-background);
+        font-family: var(--font-sans);
+        overflow-x: hidden;
+        transition: background-color 0.2s ease, color 0.2s ease;
+      }
+      [v-cloak] { display: none !important; }
+      .glass-card {
+        background: linear-gradient(135deg, rgba(11, 16, 32, 0.75) 0%, rgba(22, 28, 46, 0.75) 100%);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(173, 198, 255, 0.1);
+      }
+      .light .glass-card {
+        background: linear-gradient(135deg, rgba(235, 238, 245, 0.85) 0%, rgba(255, 255, 255, 0.85) 100%);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+      }
+      .hexagon-shape { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
+      .shimmer {
+        background: linear-gradient(90deg, transparent, rgba(139, 233, 253, 0.12), transparent);
+        background-size: 200% 100%;
+        animation: shimmer 2.5s infinite;
+      }
+      @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+      }
+      .shake-animation { animation: shake-element 0.25s ease-in-out 2; }
+      @keyframes shake-element {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+      }
+      .grain-overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0.025;
+        background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuAvMluc9R3SHxuxR5kL77Tl8BKzFBoIcuPQIm1d7LPg8m6zVQxTKUrSUKTZOp8I7-1NJ2ld3AqCrZeZwGLXrDttOep9fVsBsbsdgB3APHGcaosccMRITmouOBiY9KAaGmJ4EK_WyNPH9g6pnpbq7Zslqw07tKDJWemwoFv7g_qeYZrD9HIbQ45FDdFXWJTi739j1yjg3iR2IoOibcI1F87p604h0fE5mxrcu-lZRnIBRQFVHF2laTx85Z-CJoeRnkORwTdoCyDeZJc);
+      }
+      @keyframes scan-laser {
+        0%, 100% { top: 0%; opacity: 0.3; }
+        50% { top: 100%; opacity: 1; }
+      }
+      .animate-scan-line {
+        position: absolute;
+        animation: scan-laser 2s infinite ease-in-out;
+      }
+      @keyframes fill-progress {
+        0% { width: 0%; }
+        100% { width: 100%; }
+      }
+      .animate-progress-bar {
+        animation: fill-progress 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+      @keyframes ai-fade-in {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      .animate-fade-in {
+        animation: ai-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+    </style>
+  </head>
+  <body class="dark selection:bg-secondary/30">
+    <div id="app" v-cloak class="min-h-screen flex flex-col pt-16 pb-24 relative w-full overflow-x-hidden transition-all duration-[600ms]" :style="currentUser || isSandbox ? tierStyle : {}">
+      <div class="grain-overlay"></div>
+
+      <!-- AI PROCESSING OVERLAY -->
+      <div v-if="aiProcessingState.active" class="fixed inset-0 z-[10000] bg-[#070514]/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center select-none animate-fade-in">
+        <!-- Radial Scanning Pulse Design -->
+        <div class="relative w-40 h-40 flex items-center justify-center mb-6">
+          <!-- Pulse rings -->
+          <div class="absolute inset-0 rounded-full border border-secondary/40 animate-ping opacity-25"></div>
+          <div class="absolute -inset-4 rounded-full border border-primary/20 animate-ping opacity-15" style="animation-duration: 3s"></div>
+          <div class="absolute inset-2 rounded-full border border-dashed border-secondary/25 animate-spin" style="animation-duration: 10s"></div>
+          
+          <!-- Outer Scanning Ring -->
+          <div class="w-28 h-28 rounded-full border-2 border-secondary/20 flex items-center justify-center relative overflow-hidden shadow-[0_0_30px_rgba(217,187,241,0.15)] bg-surface-container-deep/40">
+            <!-- Rotating scanner sweep -->
+            <div class="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-secondary/15 to-transparent origin-bottom animate-spin" style="animation-duration: 2s"></div>
+            <!-- Laser scanning line -->
+            <div class="absolute left-0 right-0 h-[1.5px] bg-[#adc6ff] shadow-[0_0_12px_#adc6ff] opacity-80 animate-scan-line"></div>
+            
+            <!-- AI Icon or Brain icon inside scanner -->
+            <span class="material-symbols-outlined text-4xl text-[#adc6ff] animate-pulse">psychology</span>
+          </div>
+
+          <!-- Holographic grid corners -->
+          <div class="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#adc6ff]"></div>
+          <div class="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#adc6ff]"></div>
+          <div class="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#adc6ff]"></div>
+          <div class="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#adc6ff]"></div>
+        </div>
+
+        <div class="space-y-3 max-w-sm">
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-[#adc6ff]/10 border border-[#adc6ff]/20 text-[#adc6ff] font-mono text-[9px] uppercase tracking-widest animate-pulse">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#adc6ff] animate-ping"></span>
+            <span>AUTONOMI AI INTERFACE</span>
+          </div>
+          <h2 class="font-display text-sm font-bold text-white tracking-widest uppercase mt-1">
+            AI PROCESSING VERIFICATION
+          </h2>
+          <p class="font-mono text-[10px] text-[#adc6ff] min-h-[3rem] px-4 leading-relaxed tracking-wide select-text">
+            {{ aiProcessingState.message }}
+          </p>
+          <div class="w-48 h-1 bg-black/40 rounded-full mx-auto overflow-hidden border border-outline-variant/10">
+            <div class="h-full bg-secondary shadow-[0_0_8px_#d9bbf1] rounded-full animate-progress-bar"></div>
+          </div>
+          <div class="font-mono text-[8px] text-on-surface-variant/40 uppercase tracking-widest mt-1">
+            [ SECURE INTEGRITY TRANSMISSION CODES IN RUNTIME ]
+          </div>
+        </div>
+      </div>
+
+      <!-- AUTH SCREEN GATE -->
+      <div v-if="!currentUser && !isSandbox" class="min-h-screen w-full flex flex-col justify-between bg-[#0d0e11] text-[#e3e2e7] px-margin py-8 relative">
+        <header class="flex justify-between items-center w-full max-w-sm mx-auto pt-4 relative z-10">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#adc6ff] text-2xl">rocket_launch</span>
+            <span class="font-display font-medium text-xs tracking-[0.25em] text-[#adc6ff] uppercase">SYSTEMS ONLINE</span>
+          </div>
+          <span class="font-mono text-[9px] text-on-surface-variant/40">UPLINK SECURED</span>
+        </header>
+
+        <main class="w-full max-w-sm mx-auto my-auto flex flex-col items-center text-center relative z-10 space-y-6 pt-10">
+          <div class="relative w-24 h-24 rounded-full border border-primary/20 bg-primary-container/25 flex items-center justify-center shadow-[0_0_40px_rgba(173,198,255,0.06)]">
+            <img alt="Commander Portrait" class="w-20 h-20 rounded-full border-2 border-primary bg-primary-container object-cover" src="https://res.cloudinary.com/dtrzwgkjo/image/upload/v1779768445/realistic_painterly_illustration_of_a_level_3_sci_fi_astronaut_avatar._male_rt0rwo.png" />
+            <div class="absolute -bottom-1 -right-1 bg-secondary text-on-secondary-container text-[9px] font-bold px-1.5 py-0.5 rounded-full border border-background">CIV-SEC</div>
+          </div>
+
+          <div class="space-y-1">
+            <h1 class="font-display text-3xl font-bold text-primary tracking-tight uppercase">Habit Hustle</h1>
+            <p class="font-mono text-[9px] text-[#e3e2e7]/50 tracking-[0.2em] uppercase">DEEP SPACE OPERATIVE DIRECTORY</p>
+          </div>
+
+          <div class="glass-card p-5 rounded-2xl border border-outline-variant/30 text-left w-full space-y-3">
+            <h3 class="font-display text-xs font-bold text-primary uppercase">OPERATIONAL PROTOCOL</h3>
+            <p class="text-[11px] text-on-surface-variant/80 leading-relaxed">
+              Log into your starflight deck to record daily routines, defeat mechanical swarms in the arena, buy ship attachments and synchronize biometrics.
+            </p>
+            
+            <div class="space-y-1.5 pt-2">
+              <input v-model="loginEmail" type="email" placeholder="OPERATIVE EMAIL" class="w-full h-10 bg-black/40 border border-outline-variant/40 rounded-lg px-3 font-mono text-xs text-[#e3e2e7] focus:outline-none focus:border-primary" />
+              <input v-model="loginPassword" type="password" placeholder="SECURITY DECRYPTION PASSWORD" class="w-full h-10 bg-black/40 border border-outline-variant/40 rounded-lg px-3 font-mono text-xs text-[#e3e2e7] focus:outline-none focus:border-primary" />
+            </div>
+            
+            <div class="flex gap-2 pt-1">
+              <button @click="authWithEmail(true)" :disabled="loading" class="flex-1 h-9 bg-primary/20 border border-primary/30 hover:bg-primary/30 text-primary rounded-lg font-mono text-[10px] uppercase font-bold active:scale-95 transition-all">Sign In</button>
+              <button @click="authWithEmail(false)" :disabled="loading" class="flex-1 h-9 bg-surface-container-highest/60 hover:bg-surface-container-high text-[#e3e2e7] rounded-lg font-mono text-[10px] uppercase font-bold active:scale-95 transition-all">Register</button>
+            </div>
+          </div>
+
+          <button @click="authGoogle" :disabled="loading" class="w-full h-12 bg-primary text-on-primary font-display font-medium text-xs tracking-wider uppercase rounded-xl flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all outline-none">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.24 10.285V14.4h6.887c-.275 1.565-1.88 4.604-6.887 4.604-4.33 0-7.86-3.577-7.86-8s3.53-8 7.86-8c2.46 0 4.105 1.025 5.047 1.926l3.227-3.102C18.29 2.05 15.49 1 12.24 1c-6.075 0-11 4.925-11 11s4.925 11 11 11c6.34 0 10.55-4.43 10.55-10.715 0-.725-.075-1.275-.175-1.715H12.24z"/></svg>
+            <span>ENGAGE NEURAL GOOGLE LINK</span>
+          </button>
+
+          <button @click="enableSandboxMode" class="font-mono text-[10px] text-secondary hover:text-white uppercase tracking-wider underline active:scale-95 transition-all">
+            Neural Bypass (Launch Local Sandbox)
+          </button>
+        </main>
+
+        <footer class="w-full text-center text-[9px] font-mono text-[#e3e2e7]/30 mt-6 uppercase tracking-wider">
+          FIREBASE CLOUD PERSISTENCE ACTIVE &bull; AES-256 SECURE
+        </footer>
+      </div>
+
+      <!-- MAIN UPLINK HUD VIEWPORT -->
+      <div v-else class="flex-1 flex flex-col transition-all duration-[600ms] bg-gradient-to-b" :class="currentTier.gradientClass">
+        <!-- FIXED APP BAR -->
+        <header class="bg-surface-container/80 backdrop-blur-xl border-b border-outline-variant/30 fixed top-0 w-full z-40 h-16 flex justify-between items-center px-4 shadow-[0_0_15px_rgba(173,198,255,0.06)]">
+          <div class="flex items-center gap-3">
+            <div class="relative w-10 h-10">
+              <img alt="Commander Portrait" class="w-10 h-10 rounded-full border-2 border-primary bg-primary-container object-cover" :src="activeAvatarUrl" />
+              <div class="absolute -bottom-1 -right-1 bg-secondary text-on-secondary-container text-[8px] font-mono font-bold px-1.5 rounded-full border border-background">
+                LVL {{ currentLevel }}
+              </div>
+            </div>
+            <div>
+              <h1 class="font-display text-sm font-bold text-primary uppercase leading-tight tracking-tight select-none">Habit Hustle</h1>
+              <span class="font-mono text-[8px] text-on-surface-variant/50 tracking-wider uppercase select-none">
+                {{ userProfile.displayName || 'Operative' }} &bull; {{ isSandbox ? 'SANDBOX DECK' : 'SECURE LINK' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 font-mono text-[11px] text-right">
+            <div>
+              <div class="text-primary font-bold flex items-center justify-end gap-0.5">
+                <span class="material-symbols-outlined text-[13px]">workspace_premium</span>
+                <span>{{ userProfile.xp }} XP</span>
+              </div>
+              <div class="text-secondary font-bold flex items-center justify-end gap-0.5">
+                <span class="material-symbols-outlined text-[13px]" style="font-variationSettings: 'FILL' 1">token</span>
+                <span>{{ userProfile.crystals }} Cr</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- CENTER INDEPENDENT CONTAINER -->
+        <main class="flex-1 w-full max-w-md mx-auto px-4 py-6 relative z-10 space-y-6">
+          
+          <!-- TAB 1: ARENA -->
+          <div v-if="activeTab === 'arena'" class="space-y-6">
+            <!-- ORBIT ENVIRONMENT DECK -->
+            <div class="glass-card rounded-2xl p-4 border relative overflow-hidden transition-all duration-500" :class="currentTier.glowColor">
+              <!-- Grid Scan Ambiance Background -->
+              <div class="absolute inset-0 bg-grid-pattern opacity-[0.05] pointer-events-none"></div>
+              
+              <div class="flex justify-between items-start mb-3 border-b border-outline-variant/20 pb-2">
+                <div>
+                  <div class="flex items-center gap-1.5 select-none">
+                    <span class="material-symbols-outlined text-xs" :style="{ color: currentTier.accentColor }">explore_neighbor</span>
+                    <span class="font-mono text-[8px] text-secondary font-black uppercase tracking-widest block">NAVIGATION DECK ENVIRONMENT</span>
+                  </div>
+                  <h3 class="font-display text-sm font-black uppercase tracking-wide mt-0.5" :style="{ color: currentTier.accentColor }">
+                    {{ currentTier.name }}
+                  </h3>
+                </div>
+                <!-- Interactive Sector Selector Widget for easy testing -->
+                <div class="flex items-center gap-1 bg-black/40 rounded-lg p-0.5 border border-outline-variant/30">
+                  <span class="font-mono text-[7px] text-on-surface-variant/40 px-1.5 uppercase">SECTORS:</span>
+                  <button @click="teleportToLevel(1)" class="px-1.5 py-0.5 rounded text-[8px] font-mono font-bold transition-all" 
+                          :class="currentTier.id === 'novice_forest' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'text-on-surface-variant/65 hover:text-white'">
+                    LVL 1
+                  </button>
+                  <button @click="teleportToLevel(5)" class="px-1.5 py-0.5 rounded text-[8px] font-mono font-bold transition-all"
+                          :class="currentTier.id === 'iron_fortress' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'text-on-surface-variant/65 hover:text-white'">
+                    LVL 5
+                  </button>
+                  <button @click="teleportToLevel(10)" class="px-1.5 py-0.5 rounded text-[8px] font-mono font-bold transition-all"
+                          :class="currentTier.id === 'cosmic_citadel' ? 'bg-violet-500/20 text-violet-300 border border-violet-500/30' : 'text-on-surface-variant/65 hover:text-white'">
+                    LVL 10
+                  </button>
+                </div>
+              </div>
+
+              <!-- ILLUSTRATED LANDSCAPE MODULE -->
+              <div class="aspect-[16/6] w-full rounded-xl overflow-hidden relative border border-outline-variant/20 flex flex-col justify-end p-3 bg-gradient-to-b" :class="currentTier.gradientClass">
+                <!-- ILLUSTRATED ARTWORK DESIGNS -->
+                
+                <!-- 1. Novice Forest (Emerald Tree Canopy/Bioluminescence) -->
+                <div v-if="currentTier.id === 'novice_forest'" class="absolute inset-0 overflow-hidden pointer-events-none">
+                  <div class="absolute bottom-2 left-6 w-8 h-8 rounded-full bg-emerald-500/10 blur-md animate-pulse"></div>
+                  <div class="absolute bottom-8 right-12 w-12 h-12 rounded-full bg-teal-500/10 blur-xl animate-pulse"></div>
+                  <div class="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-emerald-500/10 to-transparent"></div>
+                  <div class="absolute bottom-0 left-4 w-1 h-8 bg-emerald-900/40 rounded-t-full"></div>
+                  <div class="absolute bottom-6 left-2 w-5 h-5 rounded-full bg-emerald-400/20 blur-[1px]"></div>
+                  <div class="absolute bottom-0 left-16 w-1 h-12 bg-emerald-900/40 rounded-t-full"></div>
+                  <div class="absolute bottom-10 left-13 w-7 h-7 rounded-full bg-emerald-300/15 blur-[2px]"></div>
+                  
+                  <div class="absolute bottom-0 right-4 w-1 h-10 bg-emerald-900/40 rounded-t-full"></div>
+                  <div class="absolute bottom-8 right-1 w-6 h-6 rounded-full bg-teal-400/25 blur-[1px]"></div>
+                  <div class="absolute top-3 left-1/4 w-0.5 h-0.5 bg-white/50 rounded-full animate-ping"></div>
+                  <div class="absolute top-6 left-1/2 w-0.5 h-0.5 bg-white/70 rounded-full"></div>
+                  <div class="absolute top-2 right-1/3 w-0.5 h-0.5 bg-white/40 rounded-full animate-ping"></div>
+                </div>
+
+                <!-- 2. Iron Fortress (Charcoal metal plating, gears, danger beacons) -->
+                <div v-if="currentTier.id === 'iron_fortress'" class="absolute inset-0 overflow-hidden pointer-events-none">
+                  <div class="absolute top-2 right-4 w-2 h-2 rounded-full bg-amber-500 animate-pulse border border-black shadow-[0_0_8px_#f59e0b]"></div>
+                  <div class="absolute top-2 left-6 w-2 h-2 rounded-full bg-amber-500 animate-pulse border border-black shadow-[0_0_8px_#f59e0b]"></div>
+                  <div class="absolute bottom-0 inset-x-0 h-4 bg-[#1e1713] border-t border-amber-600/35"></div>
+                  <div class="absolute bottom-0 left-12 w-6 h-12 border-l border-r border-[#ffbe76]/10 transform -skew-x-[20deg] origin-bottom bg-black/10 animate-pulse"></div>
+                  <div class="absolute bottom-0 right-16 w-6 h-12 border-l border-r border-[#ffbe76]/10 transform skew-x-[20deg] origin-bottom bg-black/10 animate-pulse"></div>
+                  <div class="absolute bottom-3 left-1/3 w-1 h-1 bg-amber-500 rounded-full animate-bounce"></div>
+                  <div class="absolute bottom-5 right-1/4 w-1 h-1 bg-yellow-400 rounded-full animate-bounce"></div>
+                </div>
+
+                <!-- 3. Cosmic Citadel (Deep space vortex, celestial neon spires) -->
+                <div v-if="currentTier.id === 'cosmic_citadel'" class="absolute inset-0 overflow-hidden pointer-events-none">
+                  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-gradient-to-tr from-[#7c3aed]/10 to-transparent blur-2xl animate-spin"></div>
+                  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full border border-violet-500/10 border-dashed animate-spin"></div>
+                  <div class="absolute top-4 left-10 w-8 h-[1px] bg-gradient-to-r from-white to-transparent transform -rotate-12 animate-pulse"></div>
+                  <div class="absolute top-8 right-12 w-6 h-[1px] bg-gradient-to-r from-violet-300 to-transparent transform -rotate-12"></div>
+                </div>
+
+                <!-- Scene labels overlying illustration -->
+                <div class="relative z-10 flex justify-between items-end w-full select-none">
+                  <div>
+                    <span class="font-mono text-[7px] text-white/40 uppercase tracking-widest block">RADAR ANOMALY READING</span>
+                    <span class="font-display font-black text-xs text-white uppercase tracking-wider block drop-shadow-sm">
+                      ORBIT: {{ currentTier.name }}
+                    </span>
+                  </div>
+                  <span class="font-mono text-[9px] font-bold text-white bg-black/50 border border-white/10 rounded px-1.5 py-0.5 tracking-wider">
+                    {{ currentTier.levelRange }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Atmosphere info -->
+              <p class="text-[10px] text-on-surface-variant leading-relaxed font-sans select-text mt-3">
+                {{ currentTier.description }} Telemetry registers updated dynamic stats multiplier to <span class="font-mono font-bold" :style="{ color: currentTier.accentColor }">x{{ (1 + (currentLevel * 0.05)).toFixed(2) }} active metrics</span>.
+              </p>
+            </div>
+
+            <!-- PILOT AVATAR PANEL -->
+            <div class="glass-card rounded-2xl p-4 border border-primary/20 bg-primary/[0.02] space-y-4">
+              <div class="flex justify-between items-center border-b border-primary/10 pb-2">
+                <div class="flex items-center gap-1.5 select-none">
+                  <span class="material-symbols-outlined text-primary text-base">shield_person</span>
+                  <span class="font-mono text-[10px] text-primary font-bold uppercase tracking-widest">PILOT SHIELD STATUS</span>
+                </div>
+                <span class="font-mono text-[8px] text-on-surface-variant/40">SYSTEM RUNTIME READY</span>
+              </div>
+
+              <div class="flex items-center gap-4">
+                <div class="relative w-24 h-24 shrink-0 rounded-full overflow-hidden border-2 bg-black/40 shadow-lg" :class="activeSuiteData.glowColor">
+                  <img :src="activeSuiteData.imageUrl" class="w-full h-full object-cover" :style="avatarStyleFilter" />
+                  <div class="absolute inset-x-0 h-0.5 bg-[#d9bbf1]/45 top-1/2 overflow-hidden pointer-events-none animate-pulse"></div>
+                </div>
+
+                <div class="flex-1 space-y-1 min-w-0">
+                  <div class="bg-primary/10 text-primary border border-primary/20 rounded font-mono text-[8.5px] font-bold px-1.5 py-0.5 inline-block uppercase tracking-wider select-none">
+                    {{ activeSuiteData.badge }}
+                  </div>
+                  <h3 class="font-display font-black text-on-surface uppercase text-sm leading-tight truncate">
+                    {{ activeSuiteData.name }}
+                  </h3>
+                  <p class="font-mono text-[8.5px] text-on-surface-variant/50 uppercase select-text">
+                    ID: {{ activeSuiteData.codename }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- PILOT HP CORE COMPONENT -->
+              <div class="space-y-1.5 pt-2 border-t border-primary/10">
+                <div class="flex justify-between font-mono text-[9px] font-bold">
+                  <span class="text-on-surface-variant flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[11px] text-red-500 animate-pulse">favorite</span>
+                    COMMANDER HP CORE
+                  </span>
+                  <span class="text-red-400 font-extrabold tracking-wide uppercase">
+                    {{ userProfile.hp ?? 100 }} / {{ userProfile.maxHp ?? 100 }} HP
+                  </span>
+                </div>
+                <div class="h-2.5 bg-black/40 border border-outline-variant/30 rounded-full overflow-hidden relative">
+                  <!-- Red to Golden theme hp gradient indicator with glowing outline shadow -->
+                  <div class="h-full bg-gradient-to-r from-red-600 via-red-500 to-amber-500 rounded-full transition-all duration-300 shadow-[0_0_10px_rgba(239,68,68,0.25)] animate-pulse" :style="{ width: ((userProfile.hp ?? 100) / (userProfile.maxHp ?? 100) * 100) + '%' }"></div>
+                </div>
+
+                <!-- Emergency HP restorer repair tool trigger if HP < maxHp -->
+                <div v-if="(userProfile.hp ?? 100) < (userProfile.maxHp ?? 100)" class="flex justify-between items-center gap-2 pt-1.5 pb-1 px-2.5 bg-red-950/20 rounded-lg border border-red-500/10">
+                  <span class="font-mono text-[8.5px] text-red-400 uppercase font-black blink">Warning: Structural armor leak!</span>
+                  <button @click="healOperativeHP" class="px-2 py-1 bg-red-500 hover:bg-red-600 active:scale-95 transition-all text-black font-mono text-[8.5px] font-black uppercase rounded shadow-md">
+                    REPAIR SHIELD (+25 HP)
+                  </button>
+                </div>
+
+                <!-- DYNAMIC CONSECUTIVE CRYSTA REWARD COIN BOOST PANEL -->
+                <div class="space-y-1.5 pt-2 border-t border-primary/10">
+                  <div class="flex justify-between items-center font-mono text-[9px] font-bold">
+                    <span class="text-on-surface-variant flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[11px] text-amber-400 animate-spin-slow">stars</span>
+                      CONSECUTIVE MULTIPLIER BOOST
+                    </span>
+                    <span class="text-amber-400 font-extrabold tracking-widest text-[10px] uppercase">
+                      x{{ consecutiveMultiplier.toFixed(1) }} BOOST
+                    </span>
+                  </div>
+
+                  <div class="bg-black/40 border border-[#adc6ff]/10 rounded-lg p-2 flex items-center justify-between gap-2.5">
+                    <div class="min-w-0">
+                      <span class="font-mono text-[6.5px] text-on-surface-variant/40 tracking-wider block uppercase">COMBAT LOG ACCRETION</span>
+                      <span class="font-display font-black text-[11px] text-primary-light uppercase tracking-wide block">
+                        {{ userProfile.consecutiveDays || 0 }} Consecutive {{ (userProfile.consecutiveDays || 0) === 1 ? 'Day' : 'Days' }}
+                      </span>
+                    </div>
+
+                    <!-- Visual progress nodes that light up/glow with high streak -->
+                    <div class="flex items-center gap-1 select-none">
+                      <div class="w-1.5 h-3.5 rounded-sm transition-all" :class="(userProfile.consecutiveDays || 0) >= 1 ? 'bg-amber-500/80 shadow-[0_0_8px_#f59e0b]' : 'bg-surface-variant/20 border border-outline-variant/10'"></div>
+                      <div class="w-1.5 h-3.5 rounded-sm transition-all" :class="(userProfile.consecutiveDays || 0) >= 2 ? 'bg-amber-500/80 shadow-[0_0_8px_#f59e0b]' : 'bg-surface-variant/20 border border-outline-variant/10'"></div>
+                      <div class="w-1.5 h-3.5 rounded-sm transition-all" :class="(userProfile.consecutiveDays || 0) >= 3 ? 'bg-amber-500/80 shadow-[0_0_8px_#f59e0b]' : 'bg-surface-variant/20 border border-outline-variant/10'"></div>
+                      <div class="w-1.5 h-3.5 rounded-sm transition-all" :class="(userProfile.consecutiveDays || 0) >= 4 ? 'bg-amber-500/80 shadow-[0_0_8px_#f59e0b]' : 'bg-surface-variant/20 border border-outline-variant/10'"></div>
+                      <div class="w-1.5 h-3.5 rounded-sm transition-all" :class="(userProfile.consecutiveDays || 0) >= 5 ? 'bg-amber-400 shadow-[0_0_10px_#f59e0b] animate-pulse' : 'bg-surface-variant/20 border border-outline-variant/10'"></div>
+                    </div>
+                  </div>
+
+                  <p class="font-mono text-[7px] text-on-surface-variant/40 uppercase leading-normal tracking-wide mt-1">
+                    Keep logging routines daily! 2 days yield 1.2x, 3 yields 1.5x, 4 yields 1.8x, and 5+ days yields 2.0x coins. Omission resets boost to 1.0x.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- HOSTILE THREAT OVERVIEW -->
+            <section class="glass-card rounded-2xl p-5 border border-outline-variant/30 relative overflow-hidden">
+              <div class="absolute inset-0 bg-primary/2 opacity-20 pointer-events-none shimmer" v-if="activeThreat.integrity > 0"></div>
+              
+              <div class="flex items-center gap-4 mb-4">
+                <div class="relative w-20 h-20 shrink-0 rounded-xl overflow-hidden border border-red-500/30 bg-black/40 shadow-[0_0_15px_rgba(239,68,68,0.15)] flex items-center justify-center">
+                  <img :src="activeThreat.imageUrl || 'https://res.cloudinary.com/dtrzwgkjo/image/upload/v1779782397/a_high_detail_realistic_painterly_illustration_of_the_scavenger_swarm_a_jbbrmw.png'" class="w-full h-full object-cover" referrerpolicy="no-referrer" />
+                  <div class="absolute inset-x-0 h-0.5 bg-red-500/30 top-1/2 overflow-hidden pointer-events-none animate-pulse" v-if="!activeThreat.defeated"></div>
+                  <div class="absolute inset-0 bg-green-500/10 flex items-center justify-center" v-else>
+                    <span class="material-symbols-outlined text-green-400 text-2xl font-black">check_circle</span>
+                  </div>
+                </div>
+
+                <div class="flex-1 min-w-0 space-y-0.5">
+                  <div class="flex items-center justify-between">
+                    <span class="font-mono text-[8.5px] text-secondary font-black uppercase tracking-widest select-none block">TARGET DETECTED</span>
+                    <span class="material-symbols-outlined text-error text-sm shrink-0" :class="activeThreat.defeated ? 'text-green-400' : 'animate-ping'">sensors</span>
+                  </div>
+                  <h4 class="font-display text-sm font-black text-on-surface uppercase truncate" :title="activeThreat.name">{{ activeThreat.name }}</h4>
+                  <span class="font-mono text-[8.5px] text-[#adc6ff]/50 uppercase tracking-wider block">LEVEL {{ activeThreat.level }} ANOMALY</span>
+                </div>
+              </div>
+
+              <!-- Integrity bar gauge -->
+              <div class="space-y-1">
+                <div class="flex justify-between font-mono text-[9px] font-bold">
+                  <span class="text-on-surface-variant">THREAT SHIELD CAPACITOR</span>
+                  <span :class="activeThreat.defeated ? 'text-green-400' : 'text-[#f1dbff]'">
+                    {{ activeThreat.integrity }} / {{ activeThreat.maxIntegrity }} HP
+                  </span>
+                </div>
+                <div class="h-2.5 bg-black/40 border border-outline-variant/30 rounded-full overflow-hidden xp-bar-scanner">
+                  <div class="h-full bg-gradient-to-r from-secondary-container to-secondary rounded-full transition-all duration-300" :style="{ width: (activeThreat.integrity / activeThreat.maxIntegrity * 100) + '%' }"></div>
+                </div>
+              </div>
+
+              <!-- Reward claiming overlay when boss is defeated -->
+              <div v-if="activeThreat.defeated" class="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-xl space-y-3">
+                <p class="text-[10px] font-mono text-green-300 leading-snug">
+                  COMMUNICATION SIGNALS LOST: This hostile threat swarm has been completely neutralized. Reclamation systems are ready.
+                </p>
+                <button @click="claimDefeatReward" class="w-full h-10 bg-green-500 hover:bg-green-600 text-surface font-display text-xs font-bold uppercase tracking-wider rounded-lg flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+                  <span>CLAIM SCRAP SALVAGE (+15 Cr &amp; Cycle)</span>
+                  <span class="material-symbols-outlined text-sm">verified_user</span>
+                </button>
+              </div>
+            </section>
+
+            <!-- SECTOR HABITS OPERATIONS -->
+            <section class="space-y-4">
+              <div class="flex items-center justify-between gap-2 select-none">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-secondary text-sm">checklist</span>
+                  <h3 class="font-mono text-[11px] text-secondary uppercase font-bold tracking-widest">ACTIVE BIOMETRIC ROUTINES</h3>
+                </div>
+                <div class="font-mono text-[8px] text-amber-400 font-bold uppercase tracking-widest bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-md flex items-center gap-1 shadow-[0_0_8px_rgba(245,158,11,0.1)]">
+                  <span class="material-symbols-outlined text-[10px]" :class="{'animate-pulse text-amber-300': (userProfile.dayBreaks || 0) > 0}">snooze</span>
+                  <span>{{ userProfile.dayBreaks || 0 }} BREAK PASSES</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 gap-3">
+                <div v-for="habit in habits" 
+                     :key="habit.id" 
+                     class="glass-card p-4 rounded-xl border border-outline-variant/20 flex items-center justify-between gap-4 relative overflow-hidden transition-all duration-300" 
+                     :class="{
+                       'opacity-75 bg-[#adc6ff]/[0.01] border-green-500/10': habit.lastCompletedYMD === todayYMD,
+                       'cursor-pointer hover:border-secondary/40 hover:bg-secondary/[0.01] hover:shadow-[0_0_12px_rgba(217,187,241,0.05)]': habit.lastCompletedYMD !== todayYMD && isHabitAiPowered(habit)
+                     }"
+                     @click="habit.lastCompletedYMD !== todayYMD && isHabitAiPowered(habit) ? completeHabit(habit.id) : null"
+                >
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2 select-none mb-1">
+                      <div class="flex items-center gap-1.5 flex-wrap">
+                        <span class="w-1.5 h-1.5 rounded-full" :class="habit.category === 'mind' ? 'bg-indigo-300' : habit.category === 'health' ? 'bg-emerald-300' : 'bg-amber-300'"></span>
+                        <span class="font-mono text-[8px] text-on-surface-variant/60 uppercase tracking-widest">{{ habit.category }} &bull; {{ habit.difficulty }}</span>
+                        
+                        <!-- AI-Powered Glowing Emblem -->
+                        <span v-if="isHabitAiPowered(habit)" class="inline-flex items-center gap-1 px-1 py-0.5 rounded bg-secondary/15 border border-secondary/25 text-secondary font-mono text-[7px] font-bold tracking-widest animate-pulse">
+                          <span class="material-symbols-outlined text-[8px]" style="animation: spin 6s linear infinite">psychology</span>
+                          <span>AI ASSISTED</span>
+                        </span>
+                      </div>
+                      
+                      <!-- Glowing streak flame badge -->
+                      <div class="flex items-center gap-1 px-1.5 py-0.5 rounded font-mono text-[7px] font-black uppercase tracking-widest transition-all"
+                           :class="habit.streak > 0 ? 'bg-amber-500/10 text-amber-300 border border-amber-500/20 shadow-[0_0_6px_rgba(245,158,11,0.1)]' : 'bg-black/20 text-on-surface-variant/30 border border-outline-variant/10'">
+                        <span class="material-symbols-outlined text-[9px]" :class="{'text-amber-400 animate-pulse': habit.streak > 0}">local_fire_department</span>
+                        <span>{{ habit.streak || 0 }} STREAK</span>
+                      </div>
+                    </div>
+                    
+                    <h4 class="font-display text-xs font-bold text-on-surface uppercase truncate mt-0.5 flex items-center gap-1.5">
+                      <span>{{ habit.name }}</span>
+                      <span v-if="isHabitAiPowered(habit) && habit.lastCompletedYMD !== todayYMD" class="material-symbols-outlined text-[11px] text-[#adc6ff] animate-pulse">online_prediction</span>
+                    </h4>
+                    
+                    <div class="flex items-center gap-2 mt-1.5 select-none text-[8px]">
+                      <!-- Specific Streak Multiplier Label -->
+                      <div class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded font-mono text-[7px] font-bold uppercase border"
+                           :class="habit.streak > 0 ? 'bg-[#adc6ff]/10 text-[#adc6ff] border-[#adc6ff]/20' : 'bg-black/10 text-on-surface-variant/40 border-outline-variant/10'">
+                        <span>x{{ (1.0 + (habit.streak || 0) * 0.1).toFixed(1) }} Individual Boost</span>
+                      </div>
+                      <span class="font-mono text-on-surface-variant/50 uppercase select-none">
+                        Completed: {{ habit.completions }} (🔥 Max {{ habit.highStreak }})
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="flex gap-2 shrink-0 relative z-20">
+                    <!-- Miss Button -->
+                    <button @click.stop="missHabit(habit.id)" :disabled="habit.lastCompletedYMD === todayYMD" class="w-11 h-11 rounded-lg border flex flex-col items-center justify-center active:scale-95 transition-all outline-none" :class="habit.lastCompletedYMD === todayYMD ? 'bg-black/10 border-outline-variant/10 text-on-surface-variant/30 cursor-not-allowed' : 'bg-red-500/5 hover:bg-red-500/15 border-red-500/20 text-red-400 hover:border-red-500/40'" title="Mark Routine as Missed / Suffer Enemy Attack">
+                      <span class="material-symbols-outlined text-sm">close</span>
+                      <span class="font-mono text-[7px] uppercase font-bold tracking-tighter mt-0.5">MISS</span>
+                    </button>
+
+                    <!-- Day Break Button -->
+                    <button @click.stop="useDayBreak(habit.id)" :disabled="habit.lastCompletedYMD === todayYMD" 
+                            class="w-11 h-11 rounded-lg border flex flex-col items-center justify-center active:scale-95 transition-all outline-none" 
+                            :class="habit.lastCompletedYMD === todayYMD ? 'bg-black/10 border-outline-variant/10 text-on-surface-variant/30 cursor-not-allowed' : 'bg-amber-500/5 hover:bg-amber-500/15 border-amber-500/20 text-amber-400 hover:border-amber-500/40'" 
+                            :title="'Skip Routine with Chronal Break Pass (' + (userProfile.dayBreaks || 0) + ' remaining)'">
+                      <span class="material-symbols-outlined text-sm font-bold">snooze</span>
+                      <span class="font-mono text-[7px] uppercase font-bold tracking-tighter mt-0.5">BREAK</span>
+                    </button>
+
+                    <!-- Complete Button -->
+                    <button @click.stop="completeHabit(habit.id)" :disabled="habit.lastCompletedYMD === todayYMD" class="w-11 h-11 rounded-lg border flex flex-col items-center justify-center active:scale-95 transition-all outline-none" :class="habit.lastCompletedYMD === todayYMD ? 'bg-green-500/10 border-green-500/30 text-green-400 cursor-not-allowed' : 'bg-surface-container border-outline/20 text-[#adc6ff] hover:border-primary/50'" title="Complete Routine & Strike Threat">
+                      <span class="material-symbols-outlined text-base">{{ habit.lastCompletedYMD === todayYMD ? 'task_alt' : 'offline_pin' }}</span>
+                      <span class="font-mono text-[7px] uppercase font-bold tracking-tighter mt-0.5">{{ habit.lastCompletedYMD === todayYMD ? 'DONE' : 'LOG' }}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- MANUAL ORBITAL ROUTINE INPUT -->
+            <section class="glass-card rounded-2xl p-4 border border-outline-variant/30 space-y-3">
+              <div class="flex items-center gap-1.5 border-b border-outline-variant/20 pb-2 select-none">
+                <span class="material-symbols-outlined text-primary text-base">psychology</span>
+                <span class="font-mono text-[10px] text-primary font-bold uppercase tracking-wider">SECURE VERBAL UPLINK REGISTERS</span>
+              </div>
+              <p class="text-[10px] text-on-surface-variant/80 select-text leading-relaxed">
+                Log active space routines by submitting a vocal transmission or text log (e.g. "I finished exercise workout of my lower deck stabilizer rods").
+              </p>
+              <div class="flex gap-2">
+                <input v-model="voiceInputText" type="text" placeholder="TRANSMIT ACTION DETAILED REPORTS..." class="flex-1 h-10 bg-black/40 border border-outline-variant/30 rounded-xl px-3 font-mono text-[11px] text-[#e3e2e7] focus:outline-none focus:border-secondary" @keyup.enter="submitVoiceLog" />
+                <button @click="submitVoiceLog" :disabled="isAnalyzingVoice" class="h-10 px-4 bg-secondary text-surface font-display text-[10px] font-bold uppercase rounded-xl flex items-center justify-center gap-1 active:scale-95 transition-all disabled:opacity-50">
+                  <span v-if="isAnalyzingVoice" class="w-3.5 h-3.5 rounded-full border-2 border-surface border-t-transparent animate-spin"></span>
+                  <span v-else>TRANSMIT</span>
+                </button>
+              </div>
+              <!-- Simulated response feedback log -->
+              <div v-if="voiceAnalysisExplanation" class="p-3 bg-secondary/[0.03] border border-secondary/15 rounded-xl text-[9px] font-mono text-[#adc6ff] animate-pulse">
+                &raquo; {{ voiceAnalysisExplanation }}
+              </div>
+            </section>
+
+            <!-- NEURAL LINK JOURNALING COCKPIT -->
+            <section class="glass-card rounded-2xl p-4 border border-outline-variant/30 space-y-3">
+              <div class="flex items-center gap-1.5 border-b border-outline-variant/20 pb-2 select-none">
+                <span class="material-symbols-outlined text-primary text-base">spa</span>
+                <span class="font-mono text-[10px] text-primary font-bold uppercase tracking-wider">GRATITUDE NEURAL LINK ANALYZER</span>
+              </div>
+              <p class="text-[10px] text-on-surface-variant/80 select-text leading-relaxed">
+                Log gratitude journal to evaluate neural stressors. Cybernetic scan suggests customized habit routines on stress detection.
+              </p>
+              <textarea v-model="journalContent" placeholder="REPORT PERSONAL MOOD COMPLIANCE STATE..." rows="2" class="w-full bg-black/40 border border-outline-variant/30 rounded-xl p-3 font-mono text-[11px] text-[#e3e2e7] focus:outline-none focus:border-primary resize-none"></textarea>
+              <button @click="analyzeMentalState" :disabled="isAnalyzingMood || !journalContent" class="w-full h-10 bg-primary/20 border border-primary/30 text-primary font-display text-[10px] uppercase font-bold tracking-widest rounded-xl hover:bg-primary/30 active:scale-95 transition-all flex items-center justify-center gap-1.5">
+                <span v-if="isAnalyzingMood" class="w-3.5 h-3.5 rounded-full border-2 border-primary border-t-transparent animate-spin"></span>
+                <span v-else>EXECUTE SCANNERS ANALYSIS</span>
+              </button>
+              
+              <div v-if="moodResult" class="p-3 border rounded-xl space-y-2" :class="moodResult.sentiment === 'fatigued' || moodResult.sentiment === 'stressed' ? 'bg-red-500/10 border-red-500/20' : 'bg-primary/5 border-primary/20'">
+                <div class="flex justify-between items-center select-none font-mono text-[8px] font-black uppercase">
+                  <span>NEURAL STATE TRIAGE: {{ moodResult.sentiment }}</span>
+                  <span class="text-green-300">SCAN COMPLETED</span>
+                </div>
+                <p class="text-[9.5px] font-mono text-[#adc6ff] leading-relaxed select-text">{{ moodResult.explanation }}</p>
+                <div v-if="moodResult.suggestHabit" class="pt-2 border-t border-outline-variant/20 flex justify-between items-center gap-2">
+                  <span class="text-[8.5px] font-mono text-secondary uppercase">SUGGESTED RECOVERY THERAPY: {{ habitNameById(moodResult.suggestedHabitId) }}</span>
+                  <button @click="triggerSuggestedHabit(moodResult.suggestedHabitId)" class="px-2 py-1 bg-secondary text-surface font-mono text-[8.5px] font-bold uppercase rounded hover:opacity-90 active:scale-95 transition-all">START</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- GYROSCOPIC EXERCISE TELEMETRY FORM CORRECTOR -->
+            <section class="glass-card rounded-2xl p-4 border border-outline-variant/30 space-y-3">
+              <div class="flex items-center gap-1.5 border-b border-outline-variant/20 pb-2 select-none">
+                <span class="material-symbols-outlined text-primary text-base">video_camera_back</span>
+                <span class="font-mono text-[10px] text-primary font-bold uppercase tracking-wider">COCKPIT FORM TELEMETRY assessment</span>
+              </div>
+              <p class="text-[10px] text-on-surface-variant/80 select-text leading-relaxed">
+                Upload physical exercise video kinematics (e.g., zero-g squats/pushups) or load preset mock telemetry data to scan joint flexion form.
+              </p>
+
+              <!-- Drag drop block with mock files input -->
+              <div class="border-2 border-dashed border-outline-variant/40 rounded-xl p-4 flex flex-col items-center justify-center text-center hover:bg-black/20 transition-all text-on-surface-variant relative">
+                <span class="material-symbols-outlined text-secondary text-2xl mb-1 select-none">cloud_upload</span>
+                <span class="font-mono text-[9px] uppercase tracking-wider select-none">DRAG &amp; DROP MOVEMENT SCAN / CLAMP</span>
+                <input type="file" class="absolute inset-0 opacity-0 cursor-pointer" @change="manualVideoUpload" />
+                <span v-if="videoFileName" class="text-xs text-primary font-mono mt-1 select-all underline font-bold">{{ videoFileName }}</span>
+              </div>
+
+              <!-- Presets simulated links -->
+              <div class="space-y-1.5">
+                <span class="font-mono text-[8px] text-on-surface-variant/60 uppercase block select-none">LOAD SIMULATED COCKPIT RECORINGS:</span>
+                <div class="grid grid-cols-2 gap-1.5">
+                  <button @click="loadVideoPreset('perfect_squat')" class="h-8 bg-surface-container rounded font-mono text-[8.5px] text-primary border border-outline-variant/15 hover:border-primary/30 hover:bg-surface-container-high transition-all uppercase px-2 truncate">Perfect Squat</button>
+                  <button @click="loadVideoPreset('bad_squat')" class="h-8 bg-surface-container rounded font-mono text-[8.5px] text-primary border border-outline-variant/15 hover:border-primary/30 hover:bg-surface-container-high transition-all uppercase px-2 truncate">Spine Lean Squat</button>
+                  <button @click="loadVideoPreset('perfect_pushup')" class="h-8 bg-surface-container rounded font-mono text-[8.5px] text-primary border border-outline-variant/15 hover:border-primary/30 hover:bg-surface-container-high transition-all uppercase px-2 truncate">Perfect Pushup</button>
+                  <button @click="loadVideoPreset('bad_pushup')" class="h-8 bg-surface-container rounded font-mono text-[8.5px] text-primary border border-outline-variant/15 hover:border-primary/30 hover:bg-surface-container-high transition-all uppercase px-2 truncate">Hip Sag Pushup</button>
+                </div>
+              </div>
+
+              <button @click="executeVideoScan" :disabled="isAnalyzingVideo || !videoFileName" class="w-full h-11 bg-secondary text-surface font-display text-xs font-bold uppercase tracking-widest rounded-xl hover:opacity-95 active:scale-95 transition-all flex items-center justify-center gap-1.5">
+                <span v-if="isAnalyzingVideo" class="w-3.5 h-3.5 rounded-full border-2 border-surface border-t-transparent animate-spin"></span>
+                <span v-else>SCANNERS DIAGNOSTIC BROADCAST</span>
+              </button>
+
+              <!-- Video analysis outputs -->
+              <div v-if="videoAnalysisResult" class="p-4 bg-black/40 border border-outline-variant/30 rounded-xl space-y-3">
+                <div class="flex justify-between items-center select-none">
+                  <span class="font-mono text-[8.5px] font-bold text-secondary uppercase">{{ videoAnalysisResult.exerciseDetected }}</span>
+                  <div class="flex items-center gap-1">
+                    <span class="font-display font-black text-xs" :class="videoAnalysisResult.verified ? 'text-green-400' : 'text-error'">SCORE: {{ videoAnalysisResult.score }}%</span>
+                    <span class="material-symbols-outlined text-[14px]" :class="videoAnalysisResult.verified ? 'text-green-400' : 'text-error'">{{ videoAnalysisResult.verified ? 'verified' : 'report' }}</span>
+                  </div>
+                </div>
+
+                <p class="text-[10px] font-mono text-on-surface-variant select-text leading-relaxed">{{ videoAnalysisResult.explanation }}</p>
+                
+                <div class="bg-surface-container/60 rounded-lg p-2.5 border border-outline-variant/20 space-y-1 select-text">
+                  <span class="font-mono text-[8px] text-[#adc6ff]/70 uppercase block">CYBERNETIC JOINT ANALYTICS:</span>
+                  <div class="grid grid-cols-1 gap-1 text-[9px] font-mono text-on-surface-variant">
+                    <div>Knee Hinge: {{ videoAnalysisResult.jointAngles.kneeFlexion }}</div>
+                    <div>Vertebrae Shield: {{ videoAnalysisResult.jointAngles.spineAlignment }}</div>
+                    <div>Hip Balance: {{ videoAnalysisResult.jointAngles.hipJoint }}</div>
+                  </div>
+                </div>
+
+                <div class="space-y-1">
+                  <span class="font-mono text-[8px] text-[#adc6ff]/70 uppercase block">TREATMENT RECOMMENDATIONS:</span>
+                  <ul class="space-y-1 text-[9px] font-sans text-on-surface-variant pl-3 list-decimal">
+                    <li v-for="(tip, idx) in videoAnalysisResult.tips" :key="idx" class="select-text">{{ tip }}</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- TAB 2: STATS -->
+          <div v-if="activeTab === 'stats'" class="space-y-6">
+            <!-- COCKPIT PREVIEWS AND DETAILS -->
+            <div class="glass-card rounded-2xl p-4 border border-primary/20 bg-primary/[0.02] space-y-4">
+              <div class="flex justify-between items-center border-b border-primary/10 pb-2 select-none">
+                <span class="font-mono text-[10px] text-primary font-bold uppercase tracking-widest">COCKPIT SUIT CONFIGURATIONS</span>
+                <span class="font-mono text-[8px] text-on-surface-variant/40">SYSTEMS OVERVIEW</span>
+              </div>
+
+              <div class="grid grid-cols-4 gap-1.5">
+                <button v-for="lvl in [1, 2, 3, 4]" :key="lvl" @click="selectedSimulatorLevel = lvl" class="h-9 rounded-lg border font-mono text-xs font-bold active:scale-95 transition-all outline-none" :class="selectedSimulatorLevel === lvl ? 'bg-secondary/25 text-secondary border-secondary' : 'bg-surface-container-low border-outline-variant/25 text-on-surface-variant hover:bg-surface-container'">
+                  L{{ lvl }}
+                </button>
+              </div>
+
+              <div class="flex items-center gap-4">
+                <div class="relative w-24 h-24 rounded-full overflow-hidden border-2 bg-black/40 shadow-lg" :class="selectedSuiteSpec.glowColor">
+                  <img :src="selectedSuiteSpec.imageUrl" class="w-full h-full object-cover" :style="getFilterForSuite(selectedSimulatorLevel)" />
+                </div>
+                <div class="flex-1 space-y-1 min-w-0">
+                  <span class="text-[8.5px] font-mono text-secondary font-black block uppercase tracking-wider">{{ selectedSuiteSpec.badge }}</span>
+                  <h4 class="font-display font-medium text-xs text-on-surface uppercase">{{ selectedSuiteSpec.name }}</h4>
+                  <p class="text-[10px] text-on-surface-variant/80 select-text leading-relaxed font-sans line-clamp-3">{{ selectedSuiteSpec.description }}</p>
+                </div>
+              </div>
+
+              <div class="bg-surface-container/60 rounded-xl p-3 border border-outline-variant/20 space-y-1 select-text">
+                <span class="font-mono text-[8px] text-[#adc6ff] uppercase block font-bold">⚙️ MODULE SPECIALTIES</span>
+                <ul class="space-y-0.5 pl-3 list-none">
+                  <li v-for="(spec, i) in selectedSuiteSpec.specs" :key="i" class="text-[9.5px] font-mono text-on-surface-variant flex items-center gap-1.5">
+                    <span class="w-1 h-1 bg-secondary rounded-full"></span>
+                    <span>{{ spec }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 7-DAY COMPLETIONS STATS CHART -->
+            <section class="space-y-2">
+              <div class="flex justify-between items-end mb-4 select-none">
+                <div class="space-y-0.5">
+                  <span class="font-mono text-[9px] text-[#adc6ff]/50 uppercase tracking-widest">7-DAY TELEMETRY</span>
+                  <h3 class="font-display text-sm font-black text-on-surface uppercase leading-none">SECTOR ACTION LOGS</h3>
+                </div>
+                <span class="font-mono text-[9.5px] text-secondary font-bold uppercase">{{ totalWeeklyCompletions }} COMPLETIONS THIS WEEK</span>
+              </div>
+
+              <!-- Interactive Bar Chart -->
+              <div class="flex items-end justify-between h-32 px-3 bg-secondary/[0.02] border border-outline-variant/25 rounded-2xl p-4">
+                <div v-for="day in chartDays" :key="day.name" class="flex flex-col items-center flex-1 gap-1">
+                  <div class="relative w-full flex justify-center group select-none">
+                    <span class="absolute bottom-full mb-1 opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 text-white text-[9px] font-mono px-1.5 py-0.5 rounded border border-outline-variant/30 uppercase select-all">
+                      {{ day.completions }} logged
+                    </span>
+                    <div class="w-5 bg-gradient-to-t from-secondary/40 to-secondary rounded-t-sm transition-all duration-300 hover:brightness-110 shadow-[0_0_10px_rgba(217,187,241,0.15)]" :style="{ height: day.height + '%' }"></div>
+                  </div>
+                  <span class="font-mono text-[8px] text-on-surface-variant/60 uppercase select-none">{{ day.name }}</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- GENERAL SUB-PERKS METRICS GRID -->
+            <section class="grid grid-cols-2 gap-3 select-none">
+              <div class="glass-card rounded-xl p-3 border border-outline-variant/30 text-center">
+                <span class="font-mono text-[8.5px] text-on-surface-variant uppercase tracking-wider block">BEST ROUTINE SEQUENCE</span>
+                <span class="font-display text-2xl font-black text-primary block mt-1">{{ userProfile.bestStreak }} DAYS</span>
+              </div>
+              <div class="glass-card rounded-xl p-3 border border-outline-variant/30 text-center">
+                <span class="font-mono text-[8.5px] text-on-surface-variant uppercase tracking-wider block">PERFECT COMBAT CYCLES</span>
+                <span class="font-display text-2xl font-black text-secondary block mt-1">{{ userProfile.perfectDays }} DEFEATS</span>
+              </div>
+            </section>
+
+            <!-- PERMANENT PROOF-OF-MASTERY ACHIEVEMENT BADGES -->
+            <section class="space-y-4">
+              <div class="flex justify-between items-center select-none pb-1 border-b border-outline-variant/10">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-amber-400">workspace_premium</span>
+                  <h3 class="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-widest">PERMANENT MASTERY RECORD</h3>
+                </div>
+                <span class="font-mono text-[8.5px] text-amber-400 font-bold uppercase tracking-widest">
+                  {{ (permanentAchievements || []).filter(a => a.unlocked).length }} / {{ (permanentAchievements || []).length }} UNLOCKED
+                </span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div v-for="ach in permanentAchievements" :key="ach.id" 
+                     class="glass-card p-4 rounded-xl border flex gap-3 relative overflow-hidden transition-all duration-300"
+                     :class="ach.unlocked ? 'border-amber-500/20 bg-amber-500/[0.01] shadow-[0_0_12px_rgba(245,158,11,0.05)]' : 'border-outline-variant/15 opacity-60 bg-black/10'">
+                  
+                  <!-- Circular Badge Node -->
+                  <div class="h-11 w-11 shrink-0 rounded-full flex items-center justify-center border transition-all duration-300"
+                       :class="ach.unlocked ? ach.accentColor + ' shadow-[0_0_8px_rgba(245,158,11,0.15)] scale-105 font-bold' : 'bg-surface-container border-outline-variant/20 text-on-surface-variant/40'">
+                    <span class="material-symbols-outlined text-lg animate-pulse" :class="ach.unlocked ? 'text-amber-300' : 'text-on-surface-variant/30'">{{ ach.badgeIcon }}</span>
+                  </div>
+
+                  <!-- Achievement Details -->
+                  <div class="flex-1 min-w-0 space-y-1">
+                    <div class="flex justify-between items-baseline gap-2">
+                      <h4 class="font-display text-xs font-bold uppercase truncate"
+                          :class="ach.unlocked ? 'text-on-surface' : 'text-on-surface-variant/50'">
+                        {{ ach.title }}
+                      </h4>
+                      <span class="font-mono text-[6.5px] font-black tracking-widest uppercase shrink-0"
+                            :class="ach.unlocked ? 'text-amber-400' : 'text-on-surface-variant/30'">
+                        {{ ach.unlocked ? '🏆 CALIBRATED' : '🔒 INACTIVE' }}
+                      </span>
+                    </div>
+                    
+                    <p class="text-[9.5px] font-sans leading-relaxed text-on-surface-variant/70">
+                      {{ ach.description }}
+                    </p>
+
+                    <!-- Real progress tracker bar -->
+                    <div class="space-y-1 pt-1.5">
+                      <div class="flex justify-between font-mono text-[6.5px] uppercase">
+                        <span class="text-on-surface-variant/40">PILOT METRIC</span>
+                        <span class="font-black" :class="ach.unlocked ? 'text-amber-400' : 'text-on-surface-variant/50'">
+                          {{ ach.currentProgress }} / {{ ach.targetProgress }}
+                        </span>
+                      </div>
+                      <div class="h-1 bg-black/40 rounded-full overflow-hidden border border-outline-variant/5">
+                        <div class="h-full rounded-full transition-all duration-500"
+                             :class="ach.unlocked ? 'bg-gradient-to-r from-amber-600 to-amber-400 shadow-[0_0_6px_#f59e0b]' : 'bg-on-surface-variant/20'"
+                             :style="{ width: Math.min(100, (ach.currentProgress / ach.targetProgress) * 100) + '%' }"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ADMIRAL COCKPIT LEVEL UP OVERRIDE COCKPIT -->
+            <section class="glass-card p-5 rounded-2xl border border-secondary/25 bg-secondary/[0.03] space-y-4">
+              <div class="flex justify-between items-center border-b border-secondary/20 pb-2 select-none">
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-secondary animate-pulse text-sm">admin_panel_settings</span>
+                  <span class="font-mono text-[9px] text-secondary font-bold uppercase tracking-wider">ADMIRAL COCKPIT OVERRIDE</span>
+                </div>
+                <span class="font-mono text-[8px] text-[#adc6ff]/50">PASS SECURE SHELL</span>
+              </div>
+
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="font-mono text-[9px] text-on-surface-variant uppercase tracking-wider block select-none">COMMAND CUTOFF STATUS</span>
+                  <div class="flex items-baseline gap-2 mt-0.5">
+                    <span class="font-display text-2xl font-black text-secondary select-text">LVL {{ currentLevel }}</span>
+                    <span class="font-mono text-[8px] text-on-surface-variant/60 uppercase select-text">({{ 150 - (userProfile.xp % 150) }} XP to promotional limit)</span>
+                  </div>
+                </div>
+                <div class="h-9 w-9 hexagon-shape bg-secondary/10 border border-secondary/30 flex items-center justify-center text-secondary">
+                  <span class="material-symbols-outlined text-sm">verified</span>
+                </div>
+              </div>
+
+              <p class="text-[10px] text-on-surface-variant leading-relaxed font-sans select-text">
+                Space command authorized override bypasses orbital restrictions. Force allocation of 150XP telemetry with immediate suite evolution promotion.
+              </p>
+
+              <button @click="forceLevelUp" :disabled="loading" class="w-full h-11 bg-secondary hover:opacity-90 text-surface font-display text-xs font-bold uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-1.5 active:scale-95 duration-100 outline-none">
+                <span>FORCE PROTOCOL ADVANCE</span>
+                <span class="material-symbols-outlined text-base">upgrade</span>
+              </button>
+            </section>
+          </div>
+
+          <!-- TAB 3: SHOP -->
+          <div v-if="activeTab === 'shop'" class="space-y-6">
+            <div class="mb-4 select-none">
+              <h2 class="font-display text-lg font-bold text-primary uppercase tracking-wide">QUARTERMASTER DECK</h2>
+              <div class="h-[2px] w-20 bg-gradient-to-r from-primary to-transparent rounded-full mt-1"></div>
+              <p class="font-mono text-[8.5px] text-[#e3e2e7]/50 uppercase tracking-widest mt-2">Orbital Drop Transmissions Available</p>
+            </div>
+
+            <!-- SHIP ENHANCEMENTS -->
+            <section class="space-y-3">
+              <div class="flex items-center gap-2 select-none">
+                <span class="material-symbols-outlined text-secondary text-sm">rocket_launch</span>
+                <h3 class="font-mono text-[10px] text-secondary uppercase font-bold tracking-widest">SYSTEM REINFORCEMENTS</h3>
+              </div>
+
+              <div class="grid grid-cols-1 gap-3">
+                <div v-for="item in shipItems" :key="item.id" class="glass-card p-4 rounded-xl relative overflow-hidden flex flex-col gap-3" :class="{'border-green-500/20 bg-green-500/[0.01]': item.id !== 'day_break_pass' && hasPurchased(item.id), 'shake-animation border-red-500/40': shakingItemId === item.id}">
+                  <div class="aspect-[16/7] w-full rounded-lg overflow-hidden bg-black/40 border border-outline-variant/20 flex items-center justify-center relative">
+                    <img :src="item.imageUrl" :alt="item.name" class="w-full h-full object-cover opacity-90" :class="{'grayscale opacity-30 blur-[1px]': item.id !== 'day_break_pass' && !hasPurchased(item.id)}" />
+                    <div v-if="item.id !== 'day_break_pass' && !hasPurchased(item.id)" class="absolute inset-0 bg-black/60 flex flex-col items-center justify-center">
+                      <span class="material-symbols-outlined text-error text-2xl animate-pulse">lock</span>
+                    </div>
+                    <!-- Display nice active indicator for day_break_pass -->
+                    <div v-if="item.id === 'day_break_pass' && (userProfile.dayBreaks || 0) > 0" class="absolute top-2 right-2 bg-amber-500/20 border border-amber-500/30 text-amber-400 font-mono text-[7px] font-black uppercase px-1.5 py-0.5 rounded tracking-widest shadow-[0_0_8px_rgba(245,158,11,0.2)]">
+                      {{ userProfile.dayBreaks }} CHIPS IN COCKPIT
+                    </div>
+                  </div>
+
+                  <div class="flex-1 min-w-0">
+                    <h4 class="font-display text-xs font-bold text-on-surface uppercase">{{ item.name }}</h4>
+                    <p class="font-mono text-[8px] text-secondary uppercase tracking-widest mt-0.5">{{ item.detailText }}</p>
+                    <p class="text-[10px] text-on-surface-variant mt-1 select-text">{{ item.description }}</p>
+                  </div>
+
+                  <button @click="purchaseItem(item)" class="w-full h-10 rounded-lg flex items-center justify-between px-3 font-mono text-[10px] active:scale-95 transition-all outline-none" 
+                          :class="item.id === 'day_break_pass' 
+                            ? 'bg-amber-500/10 border border-amber-500/20 text-amber-300 hover:bg-amber-500/20 hover:border-amber-500/45'
+                            : (hasPurchased(item.id) ? 'bg-green-500/10 border border-green-500/20 text-green-300' : 'bg-surface-container-highest/60 border border-outline-variant/30 text-on-surface-variant hover:text-white')">
+                    <span>
+                      {{ item.id === 'day_break_pass' 
+                        ? 'AUTHORIZE CHRONAL PASS (+1)' 
+                        : (hasPurchased(item.id) ? 'COMMISSIONED &amp; ACTIVE' : 'PURCHASE PROTOCOL') }}
+                    </span>
+                    <span v-if="item.id === 'day_break_pass' || !hasPurchased(item.id)" class="font-bold text-primary flex items-center gap-0.5" :class="{'text-amber-300': item.id === 'day_break_pass'}">
+                      <span class="material-symbols-outlined text-[13px]" style="font-variationSettings: 'FILL' 1">token</span>
+                      <span>{{ item.price }} Cr</span>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- RADIO STATION (LO-FI ORBIT PLAYER) -->
+            <section class="glass-card rounded-2xl p-4 border border-outline-variant/30 space-y-3">
+              <div class="flex justify-between items-center select-none border-b border-outline-variant/20 pb-2">
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-primary text-base">radio</span>
+                  <span class="font-mono text-[10px] text-primary font-bold uppercase tracking-wider">COSMIC LO-FI OVERDOCK</span>
+                </div>
+                <span class="font-mono text-[8px] text-on-surface-variant/40">RADIO CONTROL</span>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <button @click="toggleMusic" :disabled="!hasPurchased('cosmic_radio')" class="w-12 h-12 rounded-full flex items-center justify-center bg-secondary text-surface active:scale-95 transition-all disabled:opacity-40 select-none">
+                  <span class="material-symbols-outlined text-xl">{{ isPlayingMusic ? 'pause' : 'play_arrow' }}</span>
+                </button>
+                <div class="flex-1 min-w-0">
+                  <h4 class="font-display text-xs font-bold text-on-surface uppercase truncate">LO-FI SPACE BEATS</h4>
+                  <p class="font-mono text-[8.5px] text-on-surface-variant/60 leading-none mt-0.5">
+                    {{ isPlayingMusic ? 'NOW TUNED TO SECTOR BROADCAST' : 'TRANSCEIVER STANDBY' }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Animated Sound waves visualizer -->
+              <div v-if="isPlayingMusic" class="flex gap-0.5 items-end justify-center h-5 w-24 mx-auto select-none">
+                <div v-for="bar in 8" :key="bar" class="w-1 bg-secondary rounded-sm animate-pulse" :style="{ height: randomBarHeights[bar-1] + 'px', animationDuration: (0.4 + bar*0.08) + 's' }"></div>
+              </div>
+            </section>
+          </div>
+
+          <!-- TAB 4: MISSIONS -->
+          <div v-if="activeTab === 'mission'" class="space-y-6">
+            <div class="mb-4 select-none">
+              <h2 class="font-display text-lg font-bold text-primary uppercase tracking-wide">COMMAND SECTOR MISSIONS</h2>
+              <div class="h-[2px] w-20 bg-gradient-to-r from-primary to-transparent rounded-full mt-1"></div>
+              <p class="font-mono text-[8.5px] text-[#e3e2e7]/50 uppercase tracking-widest mt-2">Active Tactical Assignments</p>
+            </div>
+
+            <!-- LOCAL IN GAME GOALS -->
+            <section class="grid grid-cols-1 gap-3">
+              <div v-for="goal in commandGoals" :key="goal.id" class="glass-card p-4 rounded-xl border flex gap-3 relative overflow-hidden" :class="goal.completed ? 'border-green-500/20 bg-green-500/[0.01]' : 'border-outline-variant/20'">
+                <div class="h-10 w-10 shrink-0 bg-primary/10 border border-primary/20 rounded-xl flex items-center justify-center text-primary" :class="{'bg-green-500/10 text-green-300 border-green-500/20': goal.completed}">
+                  <span class="material-symbols-outlined text-base font-bold">{{ goal.completed ? 'check_circle' : 'assignment' }}</span>
+                </div>
+                <div class="flex-1 space-y-0.5 min-w-0 select-text">
+                  <span class="font-mono text-[8px] text-secondary font-black uppercase tracking-wider">{{ goal.requirement }}</span>
+                  <h4 class="font-display text-xs font-bold text-on-surface uppercase leading-none">{{ goal.title }}</h4>
+                  <p class="text-[10px] text-on-surface-variant leading-relaxed">{{ goal.description }}</p>
+                </div>
+              </div>
+            </section>
+
+            <!-- DECRYPT & UNLOCK ADVANCED GENERAL THREATS -->
+            <section class="space-y-4 pt-2">
+              <div class="flex items-center gap-2 select-none">
+                <span class="material-symbols-outlined text-error text-sm">lock_open</span>
+                <h3 class="font-mono text-[10px] text-error uppercase font-bold tracking-widest">ADVANCED SECTOR THREAT MODULES</h3>
+              </div>
+
+              <div class="grid grid-cols-1 gap-3">
+                <div v-for="threat in threats.slice(1)" :key="threat.id" class="glass-card p-4 rounded-xl border border-outline-variant/20 relative flex flex-col gap-3">
+                  <div class="flex gap-3">
+                    <div class="relative w-12 h-12 shrink-0 rounded-lg overflow-hidden border border-outline-variant/30 bg-black/40 shadow-sm flex items-center justify-center">
+                      <img :src="threat.imageUrl || 'https://res.cloudinary.com/dtrzwgkjo/image/upload/v1779782397/a_high_detail_realistic_painterly_illustration_of_the_scavenger_swarm_a_jbbrmw.png'" class="w-full h-full object-cover" referrerpolicy="no-referrer" :class="{'grayscale brightness-[0.4] contrast-75': !threat.unlocked}" />
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex justify-between items-start">
+                        <div>
+                          <h4 class="font-display text-xs font-bold text-on-surface uppercase">{{ threat.name }}</h4>
+                          <p class="font-mono text-[8.5px] text-on-surface-variant/50 uppercase mt-0.5">UNLOCK THRESHOLD: {{ threat.xpUnlockRequirement }} XP</p>
+                        </div>
+                        <span class="material-symbols-outlined text-sm" :class="threat.unlocked ? 'text-green-300' : 'text-error'">{{ threat.unlocked ? 'lock_open' : 'lock' }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p class="text-[10px] text-on-surface-variant select-text">
+                    High hazard robotic mainframe cruising close orbits. Defeating them yields colossal salvage scraps.
+                  </p>
+
+                  <button v-if="!threat.unlocked" @click="decryptThreat(threat)" :disabled="userProfile.xp < threat.xpUnlockRequirement" class="w-full h-10 bg-surface-container-highest text-on-surface font-mono text-[10px] font-bold uppercase rounded-lg border border-outline-variant/30 hover:bg-surface-container-high transition-all outline-none disabled:opacity-50">
+                    {{ userProfile.xp >= threat.xpUnlockRequirement ? 'DECRYPT TRANSMISSION LINK' : 'XP DEFICIT LOCKED' }}
+                  </button>
+                  <button v-else @click="engageThreat(threat)" class="w-full h-10 bg-primary/20 border border-primary/30 text-primary font-mono text-[10px] uppercase font-bold tracking-wider rounded-lg hover:bg-primary/30 transition-all outline-none">
+                    LOCK TACTICAL RADAR INTERFACE
+                  </button>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- TAB 5: LOG / PREF -->
+          <div v-if="activeTab === 'log'" class="space-y-6">
+            <!-- DISPLAY PREFERENCES -->
+            <section class="glass-card rounded-2xl p-4 border border-outline-variant/30 space-y-4">
+              <div class="flex justify-between items-center border-b border-outline-variant/20 pb-2 select-none">
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-primary text-base">settings_accessibility</span>
+                  <span class="font-mono text-[10px] text-primary font-bold uppercase tracking-wider">SYSTEM PREFERENCES</span>
+                </div>
+                <span class="font-mono text-[8px] text-on-surface-variant/40">CONFIG</span>
+              </div>
+
+              <div class="space-y-3 font-mono text-[10px]">
+                <div class="flex justify-between items-center">
+                  <span>NEURAL HUD COLOR MODE</span>
+                  <button @click="togglePreference('visualMode')" class="px-3 py-1.5 rounded bg-surface-container border border-outline-variant hover:bg-surface-container-high transition-all text-[#adc6ff] font-bold active:scale-95">
+                    {{ userProfile.visualMode === 'dark' ? 'DARK HUD' : 'LIGHT HUD' }}
+                  </button>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span>NEURAL AUDIO TRANSMITTER</span>
+                  <button @click="togglePreference('neuralComms')" class="px-3 py-1.5 rounded bg-surface-container border border-outline-variant hover:bg-surface-container-high transition-all text-[#adc6ff] font-bold active:scale-95">
+                    {{ userProfile.neuralComms ? 'ENABLED' : 'DISABLED' }}
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- CHRONOLOGICAL OPERATIONS LOGS FEED -->
+            <section class="space-y-3">
+              <div class="flex items-center justify-between select-none">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[#adc6ff] text-sm">terminal</span>
+                  <h3 class="font-mono text-[10px] text-on-surface-variant font-bold uppercase tracking-widest">TACTICAL LOG TRANSACTIONS</h3>
+                </div>
+                <span class="font-mono text-[8px] text-[#adc6ff]/50">CHRONO-FEED</span>
+              </div>
+
+              <div class="space-y-2 max-h-60 overflow-y-auto pr-1">
+                <div v-for="log in logs" :key="log.id" class="p-3 bg-[#adc6ff]/[0.01] border border-outline-variant/20 rounded-xl space-y-1">
+                  <div class="flex justify-between items-center select-none">
+                    <span class="font-mono text-[8px] uppercase tracking-wider" :class="log.type === 'completion' ? 'text-green-300' : log.type === 'purchase' ? 'text-[#adc6ff]' : 'text-amber-300'">
+                      [{{ log.type }}]
+                    </span>
+                    <span class="font-mono text-[7px] text-on-surface-variant/30">{{ formatDate(log.createdAt) }}</span>
+                  </div>
+                  <p class="text-[10px] font-sans text-on-surface leading-snug select-text">{{ log.title }}</p>
+                  <div class="flex gap-2 font-mono text-[8px] text-on-surface-variant/60 uppercase select-none">
+                    <span v-if="log.xpEarned">+{{ log.xpEarned }} XP</span>
+                    <span v-if="log.crystalsChange">{{ log.crystalsChange > 0 ? '+' : '' }}{{ log.crystalsChange }} Cr</span>
+                  </div>
+                </div>
+                <div v-if="logs.length === 0" class="p-4 text-center font-mono text-[9px] text-on-surface-variant/30 uppercase">
+                  Log transactions empty. Synchronize routine tasks above!
+                </div>
+              </div>
+            </section>
+
+            <!-- COCKPIT MANUAL SYSTEM RESET -->
+            <section class="glass-card p-4 rounded-2xl border border-red-500/20 bg-red-500/[0.01] space-y-3 select-none">
+              <div class="flex items-center gap-1 border-b border-red-500/20 pb-2">
+                <span class="material-symbols-outlined text-error text-sm animate-pulse">crisis_alert</span>
+                <span class="font-mono text-[9px] text-error font-bold uppercase tracking-widest">MASTER SYSTEM PROTOCOL</span>
+              </div>
+              <p class="text-[9.5px] text-on-surface-variant leading-relaxed">
+                Emergency override deletes current synced session and restores baseline telemetry metrics immediately.
+              </p>
+              <button @click="resetOperativeSystem" :disabled="loading" class="w-full h-10 bg-red-500 hover:bg-red-600 text-surface font-display text-[10px] uppercase font-bold tracking-widest rounded-lg transition-all active:scale-95 outline-none">
+                TRIGGER OPERATIONAL RESET
+              </button>
+            </section>
+
+            <!-- STANDALONE LOG OUT SYSTEM -->
+            <button @click="signOutOperative" class="w-full h-11 bg-surface-container-highest text-[#e3e2e7] border border-outline-variant/35 rounded-xl font-display text-xs font-bold uppercase tracking-widest hover:bg-surface-container-high transition-all outline-none select-none">
+              TERMINATE ACTIVE UPLINK SIGN-OUT
+            </button>
+          </div>
+        </main>
+
+        <!-- NAVIGATION BOTTOM BAR -->
+        <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-surface-container-low/95 z-40 border-t border-outline-variant/15 backdrop-blur-xl shadow-[0_-4px_25px_rgba(0,0,0,0.5)] rounded-t-2xl">
+          <button @click="activeTab = 'arena'" class="flex flex-col items-center justify-center transition-all outline-none" :class="activeTab === 'arena' ? 'text-secondary drop-shadow-[0_0_8px_#d9bbf1] scale-105 font-bold' : 'text-on-surface-variant/60 hover:text-secondary/80'" style="min-width: 44px; min-height: 44px;">
+            <span class="material-symbols-outlined text-[22px]">swords</span>
+            <span class="font-mono text-[8px] mt-0.5 tracking-tight uppercase">Arena</span>
+          </button>
+
+          <button @click="activeTab = 'stats'" class="flex flex-col items-center justify-center transition-all outline-none" :class="activeTab === 'stats' ? 'text-secondary drop-shadow-[0_0_8px_#d9bbf1] scale-105 font-bold' : 'text-on-surface-variant/60 hover:text-secondary/80'" style="min-width: 44px; min-height: 44px;">
+            <span class="material-symbols-outlined text-[22px]">insights</span>
+            <span class="font-mono text-[8px] mt-0.5 tracking-tight uppercase">Stats</span>
+          </button>
+
+          <!-- ADMIRAL SHORTCUT UPGRADE -->
+          <button @click="forceLevelUp" class="flex flex-col items-center justify-center transition-all outline-none hover:scale-110 active:scale-95" style="min-width: 44px; min-height: 44px;" title="Fast Level Up Override">
+            <span class="material-symbols-outlined text-[24px] text-secondary font-bold animate-bounce filter drop-shadow-[0_0_4px_rgba(217,187,241,0.5)]">upgrade</span>
+            <span class="font-mono text-[7px] mt-0.5 tracking-tight uppercase text-secondary font-bold">LVL UP</span>
+          </button>
+
+          <button @click="activeTab = 'shop'" class="flex flex-col items-center justify-center transition-all outline-none" :class="activeTab === 'shop' ? 'text-secondary drop-shadow-[0_0_8px_#d9bbf1] scale-105 font-bold' : 'text-on-surface-variant/60 hover:text-secondary/80'" style="min-width: 44px; min-height: 44px;">
+            <span class="material-symbols-outlined text-[22px]">shopping_bag</span>
+            <span class="font-mono text-[8px] mt-0.5 tracking-tight uppercase">Shop</span>
+          </button>
+
+          <button @click="activeTab = 'mission'" class="flex flex-col items-center justify-center transition-all outline-none" :class="activeTab === 'mission' ? 'text-secondary drop-shadow-[0_0_8px_#d9bbf1] scale-105 font-bold' : 'text-on-surface-variant/60 hover:text-secondary/80'" style="min-width: 44px; min-height: 44px;">
+            <span class="material-symbols-outlined text-[22px]">workspace_premium</span>
+            <span class="font-mono text-[8px] mt-0.5 tracking-tight uppercase">Mission</span>
+          </button>
+
+          <button @click="activeTab = 'log'" class="flex flex-col items-center justify-center transition-all outline-none" :class="activeTab === 'log' ? 'text-secondary drop-shadow-[0_0_8px_#d9bbf1] scale-105 font-bold' : 'text-on-surface-variant/60 hover:text-secondary/80'" style="min-width: 44px; min-height: 44px;">
+            <span class="material-symbols-outlined text-[22px]">account_circle</span>
+            <span class="font-mono text-[8px] mt-0.5 tracking-tight uppercase">Log</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- HOLOGRAPHIC FLOATING RADAR TOAST ALERTS -->
+      <transition-group name="toast-slide" tag="div" class="fixed top-20 right-4 left-4 z-50 pointer-events-none space-y-2">
+        <div v-if="toastMessage" class="max-w-md mx-auto p-4 rounded-xl border pointer-events-auto shadow-2xl flex items-center justify-between gap-3 transform transition-all duration-300 animate-bounce" :class="toastType === 'success' ? 'bg-green-500/10 border-green-500/30 text-green-300' : toastType === 'error' ? 'bg-red-500/10 border-red-500/30 text-red-300' : 'bg-primary/10 border-primary/30 text-primary'" :key="toastMessage">
+          <div class="flex items-center gap-2 max-w-[85%]">
+            <span class="material-symbols-outlined text-sm select-none">{{ toastType === 'success' ? 'verified' : toastType === 'error' ? 'report' : 'info' }}</span>
+            <p class="text-[10px] font-mono leading-snug select-text">{{ toastMessage }}</p>
+          </div>
+          <button @click="toastMessage = null" class="material-symbols-outlined text-sm opacity-50 hover:opacity-100 select-none">close</button>
+        </div>
+      </transition-group>
+    </div>
+
+    <!-- Active Firebase Configuration directly stored inside single index.html file -->
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyCxAHhy-zOHcK1w9PEwYtETcL7epSqtE3M",
+        authDomain: "rapid-coast-95xj8.firebaseapp.com",
+        projectId: "rapid-coast-95xj8",
+        storageBucket: "rapid-coast-95xj8.firebasestorage.app",
+        messagingSenderId: "58705777012",
+        appId: "1:58705777012:web:f87fb7900cfd2a5d68dc21"
+      };
+    </script>
+
+    <!-- Firebase Library scripts compatibility and Vue ESM injection module -->
+    <script type="module">
+      import { createApp, ref, reactive, computed, onMounted, watch } from "https://unpkg.com/vue@3/dist/vue.esm-browser.js";
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+      import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+      import { getFirestore, doc, setDoc, updateDoc, deleteDoc, collection, onSnapshot, writeBatch, getDoc, getDocFromServer } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+      // Initialize Modular Firebase variables linked to target database schema
+      const fireApp = initializeApp(firebaseConfig);
+      const db = getFirestore(fireApp, "ai-studio-7e4ffb4f-8576-45df-95bd-560c58ffcdd0");
+      const auth = getAuth(fireApp);
+      const googleProvider = new GoogleAuthProvider();
+
+      // Core suit presets references
+      const SUITE_PRESETS = {
+        1: {
+          level: 1,
+          name: 'The Broken Suit',
+          badge: 'STAGE 1: CRACKED PILOT',
+          codename: 'CRACKED-ALPHA-01',
+          description: 'A used, dilapidated suit with visible cracks and mechanical wear. It reflects the humble beginnings of your journey, where survival is the only objective.',
+          imageUrl: 'https://res.cloudinary.com/dtrzwgkjo/image/upload/v1779768444/realistic_painterly_illustration_of_a_level_1_sci_fi_astronaut_avatar._average_hy1y19.png',
+          specs: ['Basic Thermo-regulation (Fragile)', 'Cracked visor overlay indicator', 'Manual oxygen release system'],
+          systemStatus: 'WARNING: DECOMPRESSION RISK',
+          glowColor: 'shadow-red-500/15 border-red-500/30'
+        },
+        2: {
+          level: 2,
+          name: 'The Patchwork Suit',
+          badge: 'STAGE 2: SCAVENGER HERO',
+          codename: 'SCAVENGER-BETA-02',
+          description: 'Upgraded with scavenged alien plating and metallic duct tape. It features a makeshift plasma cutter and a crude back-thruster, signaling increased capability and resourcefulness.',
+          imageUrl: 'https://res.cloudinary.com/dtrzwgkjo/image/upload/v1779768446/realistic_painterly_illustration_of_a_level_2_sci_fi_astronaut_avatar._male_tywlho.png',
+          specs: ['Makeshift plasma cutter blowtorch', 'Hydrogen dual lower core thrusters', 'Composite layered armor plating'],
+          systemStatus: 'STABLE: HYBRID SCRAP DRIVE ONLINE',
+          glowColor: 'shadow-yellow-500/15 border-yellow-500/30'
+        },
+        3: {
+          level: 3,
+          name: 'The Titanium Suit',
+          badge: 'STAGE 3: TITANIUM ELITE',
+          codename: 'TITAN-GAMMA-03',
+          description: 'A polished, streamlined titanium alloy suit with neon-blue accents. This stage includes an energy rifle, a spherical drone companion, and high-tech HUD systems for the ultimate pilot experience.',
+          imageUrl: 'https://res.cloudinary.com/dtrzwgkjo/image/upload/v1779768445/realistic_painterly_illustration_of_a_level_3_sci_fi_astronaut_avatar._male_rt0rwo.png',
+          specs: ['Dynamic telemetry dashboard HUD', 'Energy rifle projectile matrix', 'Autonomous spherical helper drone'],
+          systemStatus: 'ADVANCED: SYSTEM OVERDRIVE PREPARED',
+          glowColor: 'shadow-blue-500/20 border-blue-500/30'
+        },
+        4: {
+          level: 4,
+          name: 'Dark-Matter Evolution',
+          badge: 'STAGE 4: DARK-MATTER SPECIAL',
+          codename: 'VOID-INFUSED-04',
+          description: 'Infused with exotic void particles, granting hyper-dimensional stealth and zero-friction orbit maneuvers. Resonates with a dark violet cosmic shimmer.',
+          imageUrl: 'https://res.cloudinary.com/dtrzwgkjo/image/upload/v1779768445/realistic_painterly_illustration_of_a_level_3_sci_fi_astronaut_avatar._male_rt0rwo.png',
+          specs: ['Void Stealth Particle Cloaking module', 'Dimensional warp shielding matrix', 'Active Dark-matter thrust injection'],
+          systemStatus: 'MAX OVERLOAD UNLOCKED',
+          glowColor: 'shadow-purple-500/35 border-purple-500/50'
+        }
+      };
+
+      const SHOP_DATA_PRESETS = [
+        { id: 'deep_space_skin', name: 'Deep Space Skin', description: 'Stealth coating designed for the vacuum of hard space, boosting completion impact +15%.', price: 50, detailText: 'STEALTH SHIELD SKIN', imageUrl: 'https://res.cloudinary.com/dtrzwgkjo/image/upload/v1779780684/a_high_detail_realistic_painterly_illustration_of_a_nebula_cape_cosmetic_item_rmn9da.png' },
+        { id: 'quantum_warp_drive', name: 'Quantum Warp Drive', description: 'Harness zero-point energy to unlock warp velocity, multiplying battle metrics +25%.', price: 75, detailText: 'ENGINE STELLAR MOD', imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDHWYASnYrYeGP0t1Nxn5UqLgV1H0OTyJkBYbs9GDKQjrXuIRx53RduOb2nF8DlioscDVRPXleIvpNlfdFOWFocI8qBJIRy336QvkaOHCpIf7tmOJxbzo2BLOdFuHtojEptFTdqj0trb1FtnU1KCeg3HxZT9QC-te8af8tXtj238d2Z6E1njefhgp_4kV6pITNs_cnGTy0jtJbkr4aVI_SfWHc-N1hDzp2-eO16nrTWEG6A7mqhntF8_ChQZ8Vj8CO7fNEHhEStWvY' },
+        { id: 'atmospheric_shielding', name: 'Atmospheric Shielding', description: 'Reinforced ion shields to protect against cosmic debris, adding feedback integrity +10%.', price: 100, detailText: 'ION SPHERE GRID', imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD5WdFZtpnDP59z9IKRYrRgD-9syau8TDyZhtSgwEOrhLXPzhEWdA3rhNf55crwSxPNzsZ8mOeGootkttW_DQAC5NIPrAeHykiFzZ8NvEKmXOWGkk4H5IsHhvuz-I5-jpPaSi8H4x-Z4X4_i6prpC0ciWJMgy4pp8w_GUQUR8RwWLxzrzT_rlI4YbFaowopyudjquH9rmWfPk56ZD7nQmjHpUKoMx2yrNlnsQ3Xyo_Cubplbx1AmiapvdWa6hmA3jik79D00Tjeg2I' },
+        { id: 'day_break_pass', name: 'Day-Break Chronal Shield', description: 'Triggers a bio-chronal suspension matrix in the cockpit. Buy 1 skip pass to bypass any routine for a day without losing its consecutive daily streak or receiving shield damage.', price: 15, detailText: 'CHRONAL SKIP MODULE', imageUrl: 'https://res.cloudinary.com/dtrzwgkjo/image/upload/v1779845977/screen_muwkfr.png' },
+        { id: 'cosmic_radio', name: 'Cosmic Radio Station', description: 'Unlock exclusive lo-fi space beats for active daily routine tracking.', price: 0, detailText: 'EXCLUSIVE SPACE LO-FI', imageUrl: '' }
+      ];
+
+      createApp({
+        setup() {
+          const currentUser = ref(null);
+          const isSandbox = ref(false);
+          const loading = ref(false);
+
+          // Local form controls
+          const loginEmail = ref('');
+          const loginPassword = ref('');
+          const voiceInputText = ref('');
+          const journalContent = ref('');
+          const videoFileName = ref('');
+
+          // Simulated delay states
+          const isAnalyzingVoice = ref(false);
+          const voiceAnalysisExplanation = ref(null);
+          const isAnalyzingMood = ref(false);
+          const moodResult = ref(null);
+          const isAnalyzingVideo = ref(false);
+          const videoAnalysisResult = ref(null);
+
+          // Standard responsive Tab index states
+          const activeTab = ref('stats');
+          const toastMessage = ref(null);
+          const toastType = ref('success');
+
+          // Audio Player configuration
+          const isPlayingMusic = ref(false);
+          const randomBarHeights = ref([8, 15, 12, 18, 10, 14, 20, 9]);
+
+          // Sandbox database state matching Firestore structure
+          const sandboxProfile = ref({
+            xp: 450,
+            crystals: 30,
+            perfectDays: 2,
+            bestStreak: 5,
+            purchasedItems: ['cosmic_radio'],
+            displayName: 'Operative Commander',
+            visualMode: 'dark',
+            hp: 100,
+            maxHp: 100,
+            consecutiveDays: 2,
+            lastLogYMD: new Date(Date.now() - 86400000).toISOString().split('T')[0],
+            dayBreaks: 1,
+            neuralComms: true
+          });
+
+          const sandboxHabits = ref([
+            { id: 'gratitude_log', name: 'Voice Journal analysis', category: 'mind', difficulty: 'easy', streak: 2, highStreak: 5, completions: 12, lastCompletedYMD: '', isAiPowered: true },
+            { id: 'walk_15_mins', name: 'Walk 15 mins', category: 'health', difficulty: 'medium', streak: 1, highStreak: 4, completions: 8, lastCompletedYMD: '' },
+            { id: 'exercise', name: 'Exercise', category: 'health', difficulty: 'hard', streak: 0, highStreak: 12, completions: 34, lastCompletedYMD: '' },
+            { id: 'daily_workout', name: 'Daily Workout', category: 'health', difficulty: 'hard', streak: 5, highStreak: 12, completions: 22, lastCompletedYMD: '' },
+            { id: 'skill_research', name: 'Camera Posture Scanning', category: 'skill', difficulty: 'medium', streak: 3, highStreak: 8, completions: 15, lastCompletedYMD: '', isAiPowered: true },
+            { id: 'mental_sync', name: 'Mental Sync', category: 'mind', difficulty: 'easy', streak: 2, highStreak: 5, completions: 11, lastCompletedYMD: '' }
+          ]);
+
+          const aiProcessingState = ref({
+            active: false,
+            message: '',
+            habitId: null
+          });
+
+          const isHabitAiPowered = (habit) => {
+            if (!habit) return false;
+            if (habit.isAiPowered) return true;
+            const name = (habit.name || '').toLowerCase();
+            return name.includes('ai') || 
+                   name.includes('scanning') || 
+                   name.includes('scan') || 
+                   name.includes('posture') || 
+                   name.includes('voice') || 
+                   name.includes('ocr') || 
+                   name.includes('pitch') || 
+                   name.includes('analysis') ||
+                   name.includes('journal') ||
+                   name.includes('cognitive');
+          };
+
+          const getAiProcessingMessage = (habitName) => {
+            const name = habitName.toLowerCase();
+            if (name.includes('posture') || name.includes('camera') || name.includes('video') || name.includes('exercise') || name.includes('workout') || name.includes('walk')) {
+              return "AI is analyzing your camera posture and physical stance velocity...";
+            } else if (name.includes('journal') || name.includes('gratitude') || name.includes('voice') || name.includes('mental') || name.includes('sync')) {
+              return "AI NLP engine is analyzing your cognitive sentiments and emotional spectrum...";
+            } else if (name.includes('guitar') || name.includes('pitch') || name.includes('music') || name.includes('audio')) {
+              return "AI is listening to your guitar pitch and frequency resonance...";
+            } else if (name.includes('homework') || name.includes('notes') || name.includes('ocr') || name.includes('research') || name.includes('skill')) {
+              return "AI OCR is scanning your homework notes and cognitive learning logs...";
+            } else {
+              return `AI deep learning model is scanning and verifying [${habitName}]...`;
+            }
+          };
+
+          const sandboxThreats = ref([
+            { id: 'scavenger_swarm', name: 'The Scavenger Swarm', level: 4, integrity: 75, maxIntegrity: 100, unlocked: true, defeated: false, xpUnlockRequirement: 0, imageUrl: 'https://res.cloudinary.com/dtrzwgkjo/image/upload/v1779782397/a_high_detail_realistic_painterly_illustration_of_the_scavenger_swarm_a_jbbrmw.png' },
+            { id: 'void_stalker', name: 'The Void Stalker', level: 6, integrity: 100, maxIntegrity: 100, unlocked: false, defeated: false, xpUnlockRequirement: 501, imageUrl: 'https://res.cloudinary.com/dtrzwgkjo/image/upload/v1779781859/a_high_detail_realistic_painterly_illustration_of_the_void_stalker_a_massive_frdcgx.png' },
+            { id: 'singularity_overlord', name: 'The Singularity Overlord', level: 9, integrity: 150, maxIntegrity: 150, unlocked: false, defeated: false, xpUnlockRequirement: 1501, imageUrl: '/src/assets/images/singularity_overlord_1779781383090.png' }
+          ]);
+
+          const sandboxLogs = ref([
+            { id: 'init', type: 'system', title: 'Spaceship telemetry online. Operational streak registers connected.', xpEarned: 0, crystalsChange: 0, createdAt: new Date().toISOString() }
+          ]);
+
+          // Live Firestore real-time bindings state selectors
+          const liveProfile = ref(null);
+          const liveHabits = ref([]);
+          const liveThreats = ref([]);
+          const liveLogs = ref([]);
+
+          // Custom select state simulator indicators
+          const selectedSimulatorLevel = ref(1);
+          const todayYMD = computed(() => new Date().toISOString().split('T')[0]);
+
+          // Compute user statistics dynamically based on active storage mode
+          const userProfile = computed(() => {
+            if (isSandbox.value) return sandboxProfile.value;
+            return liveProfile.value || sandboxProfile.value;
+          });
+
+          const habits = computed(() => {
+            if (isSandbox.value) return sandboxHabits.value;
+            return liveHabits.value;
+          });
+
+          const threats = computed(() => {
+            if (isSandbox.value) return sandboxThreats.value;
+            return liveThreats.value;
+          });
+
+          const logs = computed(() => {
+            if (isSandbox.value) return sandboxLogs.value;
+            return liveLogs.value;
+          });
+
+          const currentLevel = computed(() => {
+            return Math.max(1, Math.floor(userProfile.value.xp / 150));
+          });
+
+          const consecutiveMultiplier = computed(() => {
+            const days = userProfile.value.consecutiveDays || 0;
+            if (days <= 1) return 1.0;
+            if (days === 2) return 1.2;
+            if (days === 3) return 1.5;
+            if (days === 4) return 1.8;
+            return 2.0;
+          });
+
+          const permanentAchievements = computed(() => {
+            const bestStreakVal = userProfile.value.bestStreak || 0;
+            const streakMasterCount = (habits.value || []).reduce((max, h) => Math.max(max, h.streak || 0, h.highStreak || 0), 0);
+            const actualStreak = Math.max(bestStreakVal, streakMasterCount);
+
+            const healthCompletions = (habits.value || [])
+              .filter(h => h.category === 'health')
+              .reduce((acc, h) => acc + (h.completions || 0), 0);
+
+            const mindCompletions = (habits.value || [])
+              .filter(h => h.category === 'mind')
+              .reduce((acc, h) => acc + (h.completions || 0), 0);
+
+            const lvl = currentLevel.value;
+
+            const perfectDaysVal = userProfile.value.perfectDays || 0;
+
+            const purchasedCount = (userProfile.value.purchasedItems || [])
+              .filter(item => item !== 'cosmic_radio').length;
+
+            return [
+              {
+                id: 'streak_master_7',
+                title: 'Streak Archmage',
+                description: 'Lock in operational excellence. Requires a high routine streak of 7+ days.',
+                badgeIcon: 'local_fire_department',
+                accentColor: 'text-amber-400 border-amber-500/30 bg-amber-500/5',
+                targetProgress: 7,
+                currentProgress: actualStreak,
+                unlocked: actualStreak >= 7,
+              },
+              {
+                id: 'workout_warrior',
+                title: 'Workout Warrior',
+                description: 'Upgrade pilot bio-receptors. Complete physical health routines 25+ times.',
+                badgeIcon: 'fitness_center',
+                accentColor: 'text-emerald-400 border-emerald-500/30 bg-emerald-500/5',
+                targetProgress: 25,
+                currentProgress: healthCompletions,
+                unlocked: healthCompletions >= 25,
+              },
+              {
+                id: 'zen_master',
+                title: 'Zen Master',
+                description: 'Establish absolute cognitive synchronization. Complete mental routines 25+ times.',
+                badgeIcon: 'self_improvement',
+                accentColor: 'text-indigo-400 border-[#818cf8]/30 bg-[#818cf8]/5',
+                targetProgress: 25,
+                currentProgress: mindCompletions,
+                unlocked: mindCompletions >= 25,
+              },
+              {
+                id: 'high_rank_commander',
+                title: 'Cockpit Commander',
+                description: 'Upgrade authorization priority. Reach Level 5+ in the pilot hierarchy.',
+                badgeIcon: 'military_tech',
+                accentColor: 'text-[#adc6ff] border-[#adc6ff]/30 bg-[#adc6ff]/5',
+                targetProgress: 5,
+                currentProgress: lvl,
+                unlocked: lvl >= 5,
+              },
+              {
+                id: 'shield_sentinel',
+                title: 'Shield Sentinel',
+                description: 'Flawless sector defenses. Score 5+ perfect diagnostic swarm counter-strikes.',
+                badgeIcon: 'workspace_premium',
+                accentColor: 'text-rose-400 border-rose-500/30 bg-rose-500/5',
+                targetProgress: 5,
+                currentProgress: perfectDaysVal,
+                unlocked: perfectDaysVal >= 5,
+              },
+              {
+                id: 'elite_tech_researcher',
+                title: 'Elite Tech Cruiser',
+                description: 'Enhance the hull. Commission at least 2 system reinforcements from the shop.',
+                badgeIcon: 'rocket',
+                accentColor: 'text-cyan-400 border-cyan-500/30 bg-cyan-500/5',
+                targetProgress: 2,
+                currentProgress: purchasedCount,
+                unlocked: purchasedCount >= 2,
+              }
+            ];
+          });
+
+          const currentTier = computed(() => {
+            const lvl = currentLevel.value;
+            if (lvl < 5) {
+              return {
+                id: 'novice_forest',
+                name: 'Novice Forest',
+                levelRange: 'Lvl 1 - 4',
+                description: 'A glowing, emerald bioluminescent forest canopy housing rookie outpost hubs.',
+                gradientClass: 'from-[#03150f] via-[#062c20] to-[#010c09]',
+                accentColor: '#34d399',
+                glowColor: 'shadow-[0_0_20px_rgba(52,211,153,0.15)] border-emerald-500/20',
+                illustrationType: 'forest'
+              };
+            } else if (lvl < 10) {
+              return {
+                id: 'iron_fortress',
+                name: 'Iron Fortress',
+                levelRange: 'Lvl 5 - 9',
+                description: 'An industrial machinery bastion forged from reinforced rust-plated alloys and carbon grids.',
+                gradientClass: 'from-[#140f0a] via-[#24170e] to-[#0f0a07]',
+                accentColor: '#f59e0b',
+                glowColor: 'shadow-[0_0_20px_rgba(245,158,11,0.15)] border-amber-500/20',
+                illustrationType: 'fortress'
+              };
+            } else {
+              return {
+                id: 'cosmic_citadel',
+                name: 'Cosmic Citadel',
+                levelRange: 'Lvl 10+',
+                description: 'A stellar central palace hovering gracefully in a hyper-dimensional gravitational orbit.',
+                gradientClass: 'from-[#070514] via-[#120a2b] to-[#04030a]',
+                accentColor: '#d9bbf1',
+                glowColor: 'shadow-[0_0_20px_rgba(217,187,241,0.15)] border-violet-500/20',
+                illustrationType: 'citadel'
+              };
+            }
+          });
+
+          const tierStyle = computed(() => {
+            const tier = currentTier.value;
+            let primary, secondary, bg;
+            if (tier.id === 'novice_forest') {
+              primary = '#a7f3d0';
+              secondary = '#34d399';
+              bg = '#03150f';
+            } else if (tier.id === 'iron_fortress') {
+              primary = '#ffbe76';
+              secondary = '#f59e0b';
+              bg = '#140f0a';
+            } else {
+              primary = '#adc6ff';
+              secondary = '#d9bbf1';
+              bg = '#070514';
+            }
+            return {
+              '--primary': primary,
+              '--secondary': secondary,
+              '--background': bg,
+              'transition': 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
+            };
+          });
+
+          // Compute dynamic suit specs reflecting the active selected config in the tab
+          const selectedSuiteSpec = computed(() => {
+            return SUITE_PRESETS[selectedSimulatorLevel.value];
+          });
+
+          // Current character portrait logic
+          const activeSuiteData = computed(() => {
+            const lvl = currentLevel.value > 4 ? 4 : currentLevel.value;
+            return SUITE_PRESETS[lvl] || SUITE_PRESETS[1];
+          });
+
+          const activeAvatarUrl = computed(() => {
+            return activeSuiteData.value.imageUrl;
+          });
+
+          const avatarStyleFilter = computed(() => {
+            if (currentLevel.value >= 4) {
+              return "filter: hue-rotate(190deg) brightness(0.75) contrast(1.25) saturate(1.3);";
+            }
+            return "";
+          });
+
+          const activeThreat = computed(() => {
+            const active = threats.value.find(t => !t.defeated && t.unlocked);
+            return active || threats.value[0];
+          });
+
+          const shipItems = computed(() => SHOP_DATA_PRESETS.filter(i => i.id !== 'cosmic_radio'));
+
+          // Display visual notification
+          const showToast = (msg, type = 'success') => {
+            toastMessage.value = msg;
+            toastType.value = type;
+            setTimeout(() => {
+              if (toastMessage.value === msg) {
+                toastMessage.value = null;
+              }
+            }, 3000);
+          };
+
+          // Bootstrap new Cloud Profile
+          const bootstrapCloudUser = async (user) => {
+            try {
+              const uRef = doc(db, "users", user.uid);
+              const exists = await getDoc(uRef);
+              if (!exists.exists()) {
+                const batch = writeBatch(db);
+                // Profile
+                batch.set(uRef, {
+                  xp: 450,
+                  crystals: 30,
+                  perfectDays: 2,
+                  bestStreak: 5,
+                  purchasedItems: ['cosmic_radio'],
+                  displayName: user.displayName || 'Operative',
+                  visualMode: 'dark',
+                  hp: 100,
+                  maxHp: 100,
+                  consecutiveDays: 0,
+                  lastLogYMD: '',
+                  dayBreaks: 0,
+                  neuralComms: true,
+                  createdAt: new Date().toISOString()
+                });
+                // Default subcollections
+                sandboxHabits.value.forEach(h => {
+                  batch.set(doc(db, "users", user.uid, "habits", h.id), h);
+                });
+                sandboxThreats.value.forEach(t => {
+                  batch.set(doc(db, "users", user.uid, "threats", t.id), t);
+                });
+                batch.set(doc(db, "users", user.uid, "logs", "init"), {
+                  id: "init",
+                  type: "system",
+                  title: "Spaceship telemetry online. Operational streak registers connected.",
+                  xpEarned: 0,
+                  crystalsChange: 0,
+                  createdAt: new Date().toISOString()
+                });
+                await batch.commit();
+                showToast("Space operative account bootstrapped. Systems Synchronized!", "success");
+              }
+            } catch (err) {
+              console.error(err);
+              showToast("Failed to bootstrap cloud profile. Launching locally.", "error");
+            }
+          };
+
+          // On authentication state changed
+          onMounted(() => {
+            onAuthStateChanged(auth, async (user) => {
+              if (user) {
+                currentUser.value = user;
+                isSandbox.value = false;
+                await bootstrapCloudUser(user);
+
+                // Live snapshots
+                onSnapshot(doc(db, "users", user.uid), (snap) => {
+                  if (snap.exists()) {
+                    liveProfile.value = snap.data();
+                    // Match dark/light theme dynamically
+                    if (liveProfile.value.visualMode === 'light') {
+                      document.body.classList.remove('dark');
+                      document.body.classList.add('light');
+                    } else {
+                      document.body.classList.remove('light');
+                      document.body.classList.add('dark');
+                    }
+                  }
+                });
+
+                onSnapshot(collection(db, "users", user.uid, "habits"), (snap) => {
+                  const arr = [];
+                  snap.forEach(d => arr.push(d.data()));
+                  liveHabits.value = arr;
+                });
+
+                onSnapshot(collection(db, "users", user.uid, "threats"), (snap) => {
+                  const arr = [];
+                  snap.forEach(d => {
+                    const tData = d.data();
+                    if (!tData.imageUrl) {
+                      const matched = sandboxThreats.value.find(st => st.id === tData.id);
+                      if (matched) {
+                        tData.imageUrl = matched.imageUrl;
+                      }
+                    }
+                    arr.push(tData);
+                  });
+                  arr.sort((a,b) => a.xpUnlockRequirement - b.xpUnlockRequirement);
+                  liveThreats.value = arr;
+                });
+
+                onSnapshot(collection(db, "users", user.uid, "logs"), (snap) => {
+                  const arr = [];
+                  snap.forEach(d => arr.push(d.data()));
+                  arr.sort((a,b) => b.createdAt.localeCompare(a.createdAt));
+                  liveLogs.value = arr;
+                });
+              } else {
+                currentUser.value = null;
+              }
+            });
+
+            // Local music waves loop
+            setInterval(() => {
+              if (isPlayingMusic.value) {
+                randomBarHeights.value = randomBarHeights.value.map(() => Math.floor(Math.random() * 15) + 5);
+              }
+            }, 120);
+
+            // Fetch default simulator selection matching user level
+            setTimeout(() => {
+              selectedSimulatorLevel.value = currentLevel.value > 4 ? 4 : currentLevel.value;
+            }, 500);
+          });
+
+          // AUTH GATE FUNCTIONS
+          const authGoogle = async () => {
+            loading.value = true;
+            try {
+              await signInWithPopup(auth, googleProvider);
+              showToast("Neural link verified successfully!", "success");
+            } catch (err) {
+              console.error(err);
+              showToast("Secure connection gateway blocked. Enter sandbox mode below.", "error");
+            } finally {
+              loading.value = false;
+            }
+          };
+
+          const authWithEmail = async (isLogin) => {
+            if (!loginEmail.value || !loginPassword.value) {
+              showToast("Operational credentials fields required.", "error");
+              return;
+            }
+            loading.value = true;
+            try {
+              if (isLogin) {
+                await signInWithEmailAndPassword(auth, loginEmail.value, loginPassword.value);
+                showToast("Identity synchronized correctly.", "success");
+              } else {
+                await createUserWithEmailAndPassword(auth, loginEmail.value, loginPassword.value);
+                showToast("Account decrypted and logged.", "success");
+              }
+            } catch (err) {
+              showToast(err.message || "Failed credentials match.", "error");
+            } finally {
+              loading.value = false;
+            }
+          };
+
+          const enableSandboxMode = () => {
+            isSandbox.value = true;
+            showToast("Bypassing cloud uplink. Standard Local Sandbox mode prepared.", "success");
+          };
+
+          // DATABASE WRITE MUTATIONS (HANDLING BACKUP OR CLOUD TRANSFERS)
+          const updateCloudOrLocalDoc = async (docRef, localRef, fieldUpdates, subCollPath = null, elementId = null) => {
+            if (isSandbox.value) {
+              if (subCollPath) {
+                const targetIdx = localRef.value.findIndex(e => e.id === elementId);
+                if (targetIdx !== -1) {
+                  localRef.value[targetIdx] = { ...localRef.value[targetIdx], ...fieldUpdates };
+                }
+              } else {
+                localRef.value = { ...localRef.value, ...fieldUpdates };
+              }
+              return;
+            }
+            try {
+              await updateDoc(docRef, fieldUpdates);
+            } catch (err) {
+              showToast("Secure link database sync lost.", "error");
+            }
+          };
+
+          const completeHabit = async (habitId, bypassDelay = false) => {
+            if (loading.value) return;
+
+            const targetHabit = habits.value.find(h => h.id === habitId);
+            if (!targetHabit) {
+              return;
+            }
+
+            // Intercept if AI-powered and bypass delay is false
+            if (!bypassDelay && isHabitAiPowered(targetHabit)) {
+              aiProcessingState.value = {
+                active: true,
+                message: getAiProcessingMessage(targetHabit.name),
+                habitId: habitId
+              };
+              setTimeout(() => {
+                aiProcessingState.value = { active: false, message: '', habitId: null };
+                completeHabit(habitId, true);
+              }, 2000);
+              return;
+            }
+
+            loading.value = true;
+
+            const xpReward = targetHabit.difficulty === 'easy' ? 5 : targetHabit.difficulty === 'medium' ? 10 : 15;
+            
+            // CONSECUTIVE DAYS TRAILING
+            const lastLog = userProfile.value.lastLogYMD || '';
+            let nextConsecutiveDays = userProfile.value.consecutiveDays || 0;
+            const currentToday = todayYMD.value;
+
+            const dStr = new Date();
+            dStr.setUTCDate(dStr.getUTCDate() - 1);
+            const currentYesterday = dStr.toISOString().split('T')[0];
+
+            if (lastLog === '') {
+              nextConsecutiveDays = 1;
+            } else if (lastLog === currentYesterday) {
+              nextConsecutiveDays += 1;
+            } else if (lastLog === currentToday) {
+              // Already logged today, consecutiveDays remains unchanged
+            } else {
+              nextConsecutiveDays = 1;
+            }
+
+            // MULTIPLIER MULTIPLIER MECHANICS
+            const getConsecMultiplier = (days) => {
+              if (days <= 1) return 1.0;
+              if (days === 2) return 1.2;
+              if (days === 3) return 1.5;
+              if (days === 4) return 1.8;
+              return 2.0;
+            };
+
+            const newConsecMultiplier = getConsecMultiplier(nextConsecutiveDays);
+            const habitStreakMultiplier = 1.0 + (targetHabit.streak || 0) * 0.1;
+            const finalMultiplierResult = habitStreakMultiplier * newConsecMultiplier;
+            const crystalReward = Math.round(2 * finalMultiplierResult);
+
+            // Damage multiplier formulas
+            const baseDmg = targetHabit.difficulty === 'easy' ? 15 : targetHabit.difficulty === 'medium' ? 30 : 50;
+            const streakBonus = (targetHabit.streak || 0) * 3;
+            let mult = 1.0;
+            if (userProfile.value.purchasedItems?.includes('quantum_warp_drive')) mult += 0.25;
+            if (userProfile.value.purchasedItems?.includes('deep_space_skin')) mult += 0.15;
+            if (userProfile.value.purchasedItems?.includes('atmospheric_shielding')) mult += 0.10;
+
+            const finalDmg = Math.floor((baseDmg + streakBonus) * mult);
+            const nextStreak = targetHabit.streak + 1;
+            const nextHighStreak = Math.max(targetHabit.highStreak, nextStreak);
+
+            const nextXp = userProfile.value.xp + xpReward;
+            const nextCrystals = userProfile.value.crystals + crystalReward;
+            const nextBestStreak = Math.max(userProfile.value.bestStreak, nextStreak);
+
+            let threatDmgText = "";
+            let thUpdate = {};
+            if (activeThreat.value && !activeThreat.value.defeated) {
+              const currentHP = activeThreat.value.integrity;
+              const nextHP = Math.max(0, currentHP - finalDmg);
+              threatDmgText = ` Dealt ${finalDmg} DMG to ${activeThreat.value.name}!`;
+              thUpdate = { integrity: nextHP, defeated: nextHP === 0 };
+              
+              if (nextHP === 0) {
+                threatDmgText += " Swarm Neutralized!";
+              }
+            }
+
+            const hbUpdate = {
+              streak: nextStreak,
+              highStreak: nextHighStreak,
+              completions: targetHabit.completions + 1,
+              lastCompletedYMD: todayYMD.value
+            };
+
+            const usrUpdate = {
+              xp: nextXp,
+              crystals: nextCrystals,
+              bestStreak: nextBestStreak,
+              consecutiveDays: nextConsecutiveDays,
+              lastLogYMD: todayYMD.value,
+              updatedAt: new Date().toISOString()
+            };
+
+            const logId = `comp_${Date.now()}`;
+            const logObj = {
+              id: logId,
+              type: 'completion',
+              title: `Logged Routine: [${targetHabit.name}].${threatDmgText} Boost: +${crystalReward} Cr (Habit x${habitStreakMultiplier.toFixed(1)} * Daily x${newConsecMultiplier.toFixed(1)} boost applied!)`,
+              xpEarned: xpReward,
+              crystalsChange: crystalReward,
+              createdAt: new Date().toISOString()
+            };
+
+            if (isSandbox.value) {
+              // Mutate Local State
+              const hbIdx = sandboxHabits.value.findIndex(h => h.id === habitId);
+              if (hbIdx !== -1) sandboxHabits.value[hbIdx] = { ...sandboxHabits.value[hbIdx], ...hbUpdate };
+              
+              sandboxProfile.value = { ...sandboxProfile.value, ...usrUpdate };
+              
+              if (activeThreat.value && !activeThreat.value.defeated) {
+                const thIdx = sandboxThreats.value.findIndex(t => t.id === activeThreat.value.id);
+                if (thIdx !== -1) sandboxThreats.value[thIdx] = { ...sandboxThreats.value[thIdx], ...thUpdate };
+              }
+              sandboxLogs.value.unshift(logObj);
+              loading.value = false;
+              showToast(`Logged successfully! +${xpReward} XP / +${crystalReward} Cr (Boost: x${finalMultiplierResult.toFixed(2)}).`, "success");
+            } else {
+              // Write batch to Firestore
+              try {
+                const batch = writeBatch(db);
+                batch.update(doc(db, "users", currentUser.value.uid, "habits", habitId), hbUpdate);
+                batch.update(doc(db, "users", currentUser.value.uid), usrUpdate);
+                if (activeThreat.value && !activeThreat.value.defeated) {
+                  batch.update(doc(db, "users", currentUser.value.uid, "threats", activeThreat.value.id), thUpdate);
+                }
+                batch.set(doc(db, "users", currentUser.value.uid, "logs", logId), logObj);
+                await batch.commit();
+                showToast(`Logged with active coin boost multiplier.`, "success");
+              } catch (err) {
+                console.error(err);
+                showToast("Write failed to database.", "error");
+              } finally {
+                loading.value = false;
+              }
+            }
+          };
+
+          const missHabit = async (habitId) => {
+            if (loading.value) return;
+            loading.value = true;
+
+            const targetHabit = habits.value.find(h => h.id === habitId);
+            if (!targetHabit) {
+              loading.value = false;
+              return;
+            }
+
+            // Damage formulas based on routine difficulty and active enemy threat level
+            const baseDmg = targetHabit.difficulty === 'easy' ? 10 : targetHabit.difficulty === 'medium' ? 18 : 28;
+            const enemyBonus = activeThreat.value ? activeThreat.value.level * 2 : 5;
+            const finalDmg = baseDmg + enemyBonus;
+
+            const currentHP = userProfile.value.hp ?? 100;
+            const maxHP = userProfile.value.maxHp ?? 100;
+            const nextHp = Math.max(0, currentHP - finalDmg);
+
+            // Resets streak to 0 on omission
+            const hbUpdate = {
+              streak: 0
+            };
+
+            const usrUpdate = {
+              hp: nextHp,
+              consecutiveDays: 0,
+              updatedAt: new Date().toISOString()
+            };
+
+            const logId = `miss_${Date.now()}`;
+            const logObj = {
+              id: logId,
+              type: 'system',
+              title: `Routine Neglected: [${targetHabit.name}]. ${activeThreat.value ? activeThreat.value.name : 'Target Swarm'} initiated an orbital strike dealing -${finalDmg} HP to your shield. Multiplier dropped to 1.0x!`,
+              xpEarned: 0,
+              crystalsChange: 0,
+              createdAt: new Date().toISOString()
+            };
+
+            if (isSandbox.value) {
+              const hbIdx = sandboxHabits.value.findIndex(h => h.id === habitId);
+              if (hbIdx !== -1) sandboxHabits.value[hbIdx] = { ...sandboxHabits.value[hbIdx], ...hbUpdate };
+              
+              sandboxProfile.value = { ...sandboxProfile.value, ...usrUpdate };
+              sandboxLogs.value.unshift(logObj);
+              loading.value = false;
+              showToast(`Routines missed! -${finalDmg} HP shield integrity.`, "error");
+              if (nextHp === 0) {
+                showToast("Emergency Core Warning! HP Shield Depleted. Patches recommended.", "error");
+              }
+            } else {
+              try {
+                const batch = writeBatch(db);
+                batch.update(doc(db, "users", currentUser.value.uid, "habits", habitId), hbUpdate);
+                batch.update(doc(db, "users", currentUser.value.uid), usrUpdate);
+                batch.set(doc(db, "users", currentUser.value.uid, "logs", logId), logObj);
+                await batch.commit();
+                showToast(`Neglected routine registered. -${finalDmg} HP damage.`, "error");
+                if (nextHp === 0) {
+                  showToast("Emergency Warning! HP Shield Depleted. Repair shield now.", "error");
+                }
+              } catch (err) {
+                console.error(err);
+                showToast("Orbital line failure logger link.", "error");
+              } finally {
+                loading.value = false;
+              }
+            }
+          };
+
+          const useDayBreak = async (habitId) => {
+            if (loading.value) return;
+            const passes = userProfile.value.dayBreaks || 0;
+            if (passes <= 0) {
+              showToast("No Day Break passes available. Acquire one at the Quartermaster Deck (Shop)!", "error");
+              return;
+            }
+
+            loading.value = true;
+            const targetHabit = habits.value.find(h => h.id === habitId);
+            if (!targetHabit) {
+              loading.value = false;
+              return;
+            }
+
+            const nextDayBreaks = passes - 1;
+
+            // Mark routine as completed today to lock it, preserving active streak
+            const hbUpdate = {
+              lastCompletedYMD: todayYMD.value
+            };
+
+            const usrUpdate = {
+              dayBreaks: nextDayBreaks,
+              updatedAt: new Date().toISOString()
+            };
+
+            const logId = `day_break_${Date.now()}`;
+            const logObj = {
+              id: logId,
+              type: 'system',
+              title: `Day Break Activated: Safely bypassed routine [${targetHabit.name}] preserving active streak. Remaining passes: ${nextDayBreaks}.`,
+              xpEarned: 0,
+              crystalsChange: 0,
+              createdAt: new Date().toISOString()
+            };
+
+            if (isSandbox.value) {
+              const hIdx = sandboxHabits.value.findIndex(h => h.id === habitId);
+              if (hIdx !== -1) {
+                sandboxHabits.value[hIdx] = { ...sandboxHabits.value[hIdx], ...hbUpdate };
+              }
+              sandboxProfile.value = { ...sandboxProfile.value, ...usrUpdate };
+              sandboxLogs.value.unshift(logObj);
+              loading.value = false;
+              showToast(`Day Break activated. Streak preserved!`, "success");
+            } else {
+              try {
+                const batch = writeBatch(db);
+                batch.update(doc(db, "users", currentUser.value.uid, "habits", habitId), hbUpdate);
+                batch.update(doc(db, "users", currentUser.value.uid), usrUpdate);
+                batch.set(doc(db, "users", currentUser.value.uid, "logs", logId), logObj);
+                await batch.commit();
+                showToast("Chronal break logged. Streak secured.", "success");
+              } catch (err) {
+                console.error(err);
+                showToast("Orbital sync error during break setup.", "error");
+              } finally {
+                loading.value = false;
+              }
+            }
+          };
+
+          const healOperativeHP = async () => {
+            if (loading.value) return;
+            loading.value = true;
+
+            const currentHP = userProfile.value.hp ?? 100;
+            const maxHP = userProfile.value.maxHp ?? 100;
+            if (currentHP >= maxHP) {
+              loading.value = false;
+              showToast("Your shield system is already fully optimized.", "info");
+              return;
+            }
+
+            const healAmount = 25;
+            const nextHp = Math.min(maxHP, currentHP + healAmount);
+
+            const usrUpdate = {
+              hp: nextHp,
+              updatedAt: new Date().toISOString()
+            };
+
+            const logId = `heal_${Date.now()}`;
+            const logObj = {
+              id: logId,
+              type: 'system',
+              title: `Armor Reconstruction: Injected nanite patches back to defensive shield capacitors, repairing +${healAmount} HP.`,
+              xpEarned: 0,
+              crystalsChange: 0,
+              createdAt: new Date().toISOString()
+            };
+
+            if (isSandbox.value) {
+              sandboxProfile.value = { ...sandboxProfile.value, ...usrUpdate };
+              sandboxLogs.value.unshift(logObj);
+              loading.value = false;
+              showToast(`Armor patched successfully. Restored +${healAmount} HP core components.`, "success");
+            } else {
+              try {
+                const batch = writeBatch(db);
+                batch.update(doc(db, "users", currentUser.value.uid), usrUpdate);
+                batch.set(doc(db, "users", currentUser.value.uid, "logs", logId), logObj);
+                await batch.commit();
+                showToast(`Armor patched. +${healAmount} HP online.`, "success");
+              } catch (err) {
+                console.error(err);
+                showToast("Uplink failure repair shield command.", "error");
+              } finally {
+                loading.value = false;
+              }
+            }
+          };
+
+          const claimDefeatReward = async () => {
+            if (loading.value) return;
+            loading.value = true;
+
+            const targetTh = activeThreat.value;
+            if (!targetTh || !targetTh.defeated) {
+              loading.value = false;
+              return;
+            }
+
+            const rewardCr = 15;
+            const nextCrystals = userProfile.value.crystals + rewardCr;
+            const nextPerfect = userProfile.value.perfectDays + 1;
+
+            const usrUpdate = {
+              crystals: nextCrystals,
+              perfectDays: nextPerfect,
+              updatedAt: new Date().toISOString()
+            };
+
+            const thUpdate = {
+              integrity: targetTh.maxIntegrity,
+              defeated: false
+            };
+
+            const logId = `defeat_${Date.now()}`;
+            const logObj = {
+              id: logId,
+              type: 'threat_defeated',
+              title: `Defeated Swarm: Claimed scrap scraps from ${targetTh.name}. +15 Cr and +1 Perfect Sequence registered!`,
+              xpEarned: 0,
+              crystalsChange: rewardCr,
+              createdAt: new Date().toISOString()
+            };
+
+            if (isSandbox.value) {
+              sandboxProfile.value = { ...sandboxProfile.value, ...usrUpdate };
+              const thIdx = sandboxThreats.value.findIndex(t => t.id === targetTh.id);
+              if (thIdx !== -1) sandboxThreats.value[thIdx] = { ...sandboxThreats.value[thIdx], ...thUpdate };
+              sandboxLogs.value.unshift(logObj);
+              loading.value = false;
+              showToast("Reclaimed +15 Cr scrap pieces from enemy core!", "success");
+            } else {
+              try {
+                const batch = writeBatch(db);
+                batch.update(doc(db, "users", currentUser.value.uid), usrUpdate);
+                batch.update(doc(db, "users", currentUser.value.uid, "threats", targetTh.id), thUpdate);
+                batch.set(doc(db, "users", currentUser.value.uid, "logs", logId), logObj);
+                await batch.commit();
+                showToast("Salvage pieces downloaded.", "success");
+              } catch (err) {
+                showToast("Network gateway database read timeout.", "error");
+              } finally {
+                loading.value = false;
+              }
+            }
+          };
+
+          const forceLevelUp = async () => {
+            loading.value = true;
+            // Force increase user's XP to next promotional cutoff
+            const currentLvl = Math.max(1, Math.floor(userProfile.value.xp / 150));
+            const targetXP = (currentLvl + 1) * 150;
+            const xpAdd = targetXP - userProfile.value.xp;
+
+            const usrUpdate = {
+              xp: targetXP,
+              updatedAt: new Date().toISOString()
+            };
+
+            const logId = `lvl_up_${Date.now()}`;
+            const logObj = {
+              id: logId,
+              type: 'system',
+              title: `Admiral override activated. Synchronized evolution state to Command Level ${currentLvl + 1}!`,
+              xpEarned: xpAdd,
+              crystalsChange: 0,
+              createdAt: new Date().toISOString()
+            };
+
+            if (isSandbox.value) {
+              sandboxProfile.value = { ...sandboxProfile.value, ...usrUpdate };
+              sandboxLogs.value.unshift(logObj);
+              loading.value = false;
+              showToast(`Deck bypass secure: Promoted to Level ${currentLvl + 1}!`, "success");
+            } else {
+              try {
+                const batch = writeBatch(db);
+                batch.update(doc(db, "users", currentUser.value.uid), usrUpdate);
+                batch.set(doc(db, "users", currentUser.value.uid, "logs", logId), logObj);
+                await batch.commit();
+                showToast("Override promo logged.", "success");
+              } catch (err) {
+                showToast("Command transaction refused by cloud.", "error");
+              } finally {
+                loading.value = false;
+              }
+            }
+            // Update preview selector to match new level
+            setTimeout(() => {
+              selectedSimulatorLevel.value = currentLevel.value > 4 ? 4 : currentLevel.value;
+            }, 500);
+          };
+
+          const teleportToLevel = async (lvl) => {
+            if (loading.value) return;
+            loading.value = true;
+            const targetXP = lvl * 150;
+            const prevXP = userProfile.value.xp;
+
+            const usrUpdate = {
+              xp: targetXP,
+              updatedAt: new Date().toISOString()
+            };
+
+            const logId = `teleport_${Date.now()}`;
+            const logObj = {
+              id: logId,
+              type: 'system',
+              title: `Hyper-jump warp coordinates engaged: Pilot status localized to Command Sector Level ${lvl}!`,
+              xpEarned: targetXP - prevXP,
+              crystalsChange: 0,
+              createdAt: new Date().toISOString()
+            };
+
+            if (isSandbox.value) {
+              sandboxProfile.value = { ...sandboxProfile.value, ...usrUpdate };
+              sandboxLogs.value.unshift(logObj);
+              loading.value = false;
+              showToast(`Hyper-warp sector connection verified! Transferred to Level ${lvl}.`, "success");
+            } else {
+              try {
+                const batch = writeBatch(db);
+                batch.update(doc(db, "users", currentUser.value.uid), usrUpdate);
+                batch.set(doc(db, "users", currentUser.value.uid, "logs", logId), logObj);
+                await batch.commit();
+                showToast(`Warp log completed.`, "success");
+              } catch (err) {
+                console.error(err);
+                showToast("Orbital link timeout. Bypass active.", "error");
+              } finally {
+                loading.value = false;
+              }
+            }
+
+            // Also keep preview selected gear synced
+            setTimeout(() => {
+              selectedSimulatorLevel.value = lvl > 4 ? 4 : lvl;
+            }, 500);
+          };
+
+          const purchaseItem = async (item) => {
+            if (item.id !== 'day_break_pass' && userProfile.value.purchasedItems?.includes(item.id)) {
+              showToast(`'${item.name}' is already equipped on current chassis.`, "info");
+              return;
+            }
+
+            if (userProfile.value.crystals < item.price) {
+              // Trigger local wobble animations
+              shakingItemId.value = item.id;
+              showToast(`Deficit balance: Requires ${item.price} Cr. Obtain salvage scrap from goals or boss battles!`, "error");
+              setTimeout(() => { shakingItemId.value = null; }, 600);
+              return;
+            }
+
+            loading.value = true;
+            const price = item.price;
+            
+            const usrUpdate = {
+              crystals: userProfile.value.crystals - price,
+              updatedAt: new Date().toISOString()
+            };
+
+            if (item.id === 'day_break_pass') {
+              usrUpdate.dayBreaks = (userProfile.value.dayBreaks || 0) + 1;
+            } else {
+              usrUpdate.purchasedItems = [...(userProfile.value.purchasedItems || []), item.id];
+            }
+
+            const logId = `purchase_${Date.now()}`;
+            const logObj = {
+              id: logId,
+              type: 'purchase',
+              title: item.id === 'day_break_pass'
+                ? `Authorized Day Break Sub-matrix payload: Bought 1 [${item.name}] for ${price} Cr.`
+                : `Acquired drop blueprint: [${item.name}] for ${price} Cr. Installed.`,
+              xpEarned: 0,
+              crystalsChange: -price,
+              createdAt: new Date().toISOString()
+            };
+
+            if (isSandbox.value) {
+              sandboxProfile.value = { ...sandboxProfile.value, ...usrUpdate };
+              sandboxLogs.value.unshift(logObj);
+              loading.value = false;
+              showToast(item.id === 'day_break_pass' 
+                ? `Day Break Pass purchased! Active passes: ${sandboxProfile.value.dayBreaks}` 
+                : `Attachment [${item.name}] downloaded and calibrated!`, "success");
+            } else {
+              try {
+                const batch = writeBatch(db);
+                batch.update(doc(db, "users", currentUser.value.uid), usrUpdate);
+                batch.set(doc(db, "users", currentUser.value.uid, "logs", logId), logObj);
+                await batch.commit();
+                showToast(item.id === 'day_break_pass' 
+                  ? `Day Break pass initialized. Remaining skips: ${userProfile.value.dayBreaks + 1}` 
+                  : "System upgrade mounted.", "success");
+              } catch (err) {
+                showToast("Transaction rejected on cloud database link.", "error");
+              } finally {
+                loading.value = false;
+              }
+            }
+          };
+
+          const shakingItemId = ref(null);
+          const hasPurchased = (itemId) => userProfile.value.purchasedItems?.includes(itemId);
+
+          const decryptThreat = async (threat) => {
+            if (userProfile.value.xp < threat.xpUnlockRequirement) return;
+            loading.value = true;
+
+            const logId = `dec_${Date.now()}`;
+            const logObj = {
+              id: logId,
+              type: 'system',
+              title: `Decrypted high hazard anomaly sector link: [${threat.name}]. Active on long range tracking sensor.`,
+              xpEarned: 0,
+              crystalsChange: 0,
+              createdAt: new Date().toISOString()
+            };
+
+            if (isSandbox.value) {
+              const thIdx = sandboxThreats.value.findIndex(t => t.id === threat.id);
+              if (thIdx !== -1) sandboxThreats.value[thIdx].unlocked = true;
+              sandboxLogs.value.unshift(logObj);
+              loading.value = false;
+              showToast(`Radar calibration successful. Threat logs active!`, "success");
+            } else {
+              try {
+                const batch = writeBatch(db);
+                batch.update(doc(db, "users", currentUser.value.uid, "threats", threat.id), { unlocked: true });
+                batch.set(doc(db, "users", currentUser.value.uid, "logs", logId), logObj);
+                await batch.commit();
+                showToast("Tracking decrypted.", "success");
+              } catch (err) {
+                showToast("Access link decryption corrupted.", "error");
+              } finally {
+                loading.value = false;
+              }
+            }
+          };
+
+          const engageThreat = (threat) => {
+            activeTab.value = 'arena';
+            showToast(`Locked laser sensor mechanics toward ${threat.name}!`, "info");
+          };
+
+          const togglePreference = async (field) => {
+            let nextVal = "";
+            if (field === 'visualMode') {
+              nextVal = userProfile.value.visualMode === 'dark' ? 'light' : 'dark';
+            } else if (field === 'neuralComms') {
+              nextVal = !userProfile.value.neuralComms;
+            }
+
+            const usrUpdate = {
+              [field]: nextVal,
+              updatedAt: new Date().toISOString()
+            };
+
+            if (isSandbox.value) {
+              sandboxProfile.value = { ...sandboxProfile.value, ...usrUpdate };
+              if (field === 'visualMode') {
+                if (nextVal === 'light') {
+                  document.body.classList.remove('dark');
+                  document.body.classList.add('light');
+                } else {
+                  document.body.classList.remove('light');
+                  document.body.classList.add('dark');
+                }
+              }
+              showToast(`System preferences calibrated.`, "info");
+            } else {
+              try {
+                await updateDoc(doc(db, "users", currentUser.value.uid), usrUpdate);
+              } catch (err) {
+                showToast("Network setting synchronization failure.", "error");
+              }
+            }
+          };
+
+          const resetOperativeSystem = async () => {
+            if (!confirm("Are you sure you want to self destruct your biometrics state back to zero level standard? This reset is complete and permanent!")) return;
+            loading.value = true;
+
+            const profileDefault = {
+              xp: 450,
+              crystals: 30,
+              perfectDays: 2,
+              bestStreak: 5,
+              purchasedItems: ['cosmic_radio'],
+              displayName: userProfile.value.displayName || 'Operative',
+              visualMode: 'dark',
+              hp: 100,
+              maxHp: 100,
+              consecutiveDays: 0,
+              lastLogYMD: '',
+              dayBreaks: 0,
+              neuralComms: true,
+              updatedAt: new Date().toISOString()
+            };
+
+            const logId = `reset_${Date.now()}`;
+            const logObj = {
+              id: logId,
+              type: 'system',
+              title: `Re-initiated full cold system telemetry sweep. Operational logs zeroed.`,
+              xpEarned: 0,
+              crystalsChange: 0,
+              createdAt: new Date().toISOString()
+            };
+
+            if (isSandbox.value) {
+              sandboxProfile.value = { ...sandboxProfile.value, ...profileDefault };
+              sandboxHabits.value.forEach((h, idx) => {
+                sandboxHabits.value[idx].streak = 0;
+                sandboxHabits.value[idx].highStreak = 0;
+                sandboxHabits.value[idx].completions = 0;
+                sandboxHabits.value[idx].lastCompletedYMD = '';
+              });
+              sandboxThreats.value.forEach((t, i) => {
+                sandboxThreats.value[i].integrity = t.maxIntegrity;
+                sandboxThreats.value[i].defeated = false;
+                if (t.id !== 'scavenger_swarm') {
+                  sandboxThreats.value[i].unlocked = false;
+                }
+              });
+              sandboxLogs.value = [logObj];
+              loading.value = false;
+              showToast("Baseline metrics restored. Cockpit secure.", "success");
+            } else {
+              try {
+                const batch = writeBatch(db);
+                batch.update(doc(db, "users", currentUser.value.uid), profileDefault);
+                
+                liveHabits.value.forEach(h => {
+                  batch.update(doc(db, "users", currentUser.value.uid, "habits", h.id), {
+                    streak: 0, highStreak: 0, completions: 0, lastCompletedYMD: ''
+                  });
+                });
+
+                liveThreats.value.forEach(t => {
+                  batch.update(doc(db, "users", currentUser.value.uid, "threats", t.id), {
+                    integrity: t.maxIntegrity, defeated: false, unlocked: t.id === 'scavenger_swarm'
+                  });
+                });
+
+                liveLogs.value.forEach(l => {
+                  batch.delete(doc(db, "users", currentUser.value.uid, "logs", l.id));
+                });
+
+                batch.set(doc(db, "users", currentUser.value.uid, "logs", logId), logObj);
+                await batch.commit();
+                showToast("Systems wiped.", "success");
+              } catch (err) {
+                showToast("System deletion validation error.", "error");
+              } finally {
+                loading.value = false;
+              }
+            }
+          };
+
+          const signOutOperative = async () => {
+            if (isSandbox.value) {
+              isSandbox.value = false;
+              showToast("Signed out of mock sandbox.", "info");
+              return;
+            }
+            try {
+              await signOut(auth);
+              showToast("Neural link disconnected.", "info");
+            } catch (err) {
+              showToast("Gateway connection refuse.", "error");
+            }
+          };
+
+          // CLIENT SIDE PLAYGROUND AI SIMULATIONS
+          const submitVoiceLog = () => {
+            if (!voiceInputText.value) return;
+            isAnalyzingVoice.value = true;
+            voiceAnalysisExplanation.value = null;
+
+            setTimeout(() => {
+              const speech = voiceInputText.value.toLowerCase();
+              let matchId = null;
+
+              if (speech.includes("gratitude") || speech.includes("journal")) matchId = 'gratitude_log';
+              else if (speech.includes("walk") || speech.includes("foot")) matchId = 'walk_15_mins';
+              else if (speech.includes("workout") || speech.includes("exercise") || speech.includes("lift")) matchId = 'exercise';
+              else if (speech.includes("daily") || speech.includes("train")) matchId = 'daily_workout';
+              else if (speech.includes("research") || speech.includes("skill") || speech.includes("code")) matchId = 'skill_research';
+              else if (speech.includes("sync") || speech.includes("mental") || speech.includes("meditat")) matchId = 'mental_sync';
+
+              if (matchId) {
+                const habit = habits.value.find(h => h.id === matchId);
+                if (habit.lastCompletedYMD === todayYMD.value) {
+                  voiceAnalysisExplanation.value = `TRANSCEIVER DECODER: Detected match to operational habit '${habit.name}', but this priority deck sequence is already completed for this light rotation orbit.`;
+                } else {
+                  completeHabit(matchId);
+                  voiceAnalysisExplanation.value = `TRANSCEIVER DECODER: Successfully identified keywords corresponding to sector routine [${habit.name}]. Completed telemetrics synchronized with +${finalHabitXP(habit)} XP deal impact!`;
+                }
+              } else {
+                voiceAnalysisExplanation.value = "TRANSCEIVER DECODER WARNING: Analytical parser cannot match reported logs to any active biometric habits. Please try again adding specific tags like 'journal', 'exercise' or 'walk'.";
+              }
+              isAnalyzingVoice.value = false;
+              voiceInputText.value = '';
+            }, 1200);
+          };
+
+          const finalHabitXP = (hb) => {
+            return hb.difficulty === 'easy' ? 5 : hb.difficulty === 'medium' ? 10 : 15;
+          };
+
+          const analyzeMentalState = () => {
+            if (!journalContent.value) return;
+            isAnalyzingMood.value = true;
+            moodResult.value = null;
+
+            setTimeout(() => {
+              const txt = journalContent.value.toLowerCase();
+              let sentiment = 'positive';
+              let explanation = 'Diagnostic scanners register high-frequency calm index throughout active cerebral hemisphere. Cardiac cadence remains exceptionally synchronized.';
+              let suggestHabit = false;
+              let suggestedHabitId = 'gratitude_log';
+
+              if (txt.includes("stressed") || txt.includes("tired") || txt.includes("anxious") || txt.includes("weary") || txt.includes("difficult") || txt.includes("exhausted") || txt.includes("heavy") || txt.includes("burnout")) {
+                sentiment = 'fatigued';
+                explanation = 'Diagnostic scanners detect minor high-frequency structural noise within left amygdala nodes. Elevated stress index indicates sympathetic overload from high gravity navigation.';
+                suggestHabit = true;
+                suggestedHabitId = 'mental_sync';
+              }
+
+              moodResult.value = { sentiment, explanation, suggestHabit, suggestedHabitId };
+              isAnalyzingMood.value = false;
+            }, 1500);
+          };
+
+          const triggerSuggestedHabit = (hId) => {
+            completeHabit(hId);
+            moodResult.value = null;
+            journalContent.value = '';
+          };
+
+          const loadVideoPreset = (preset) => {
+            videoFileName.value = preset.toUpperCase() + "_DATA_LOG.mp4";
+            videoAnalysisResult.value = null;
+            showToast("Simulated cockpit recording transmission loaded.", "info");
+          };
+
+          const manualVideoUpload = (e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              videoFileName.value = file.name;
+              videoAnalysisResult.value = null;
+              showToast(`Cockpit file recording "${file.name}" placed in video cache array.`, "success");
+            }
+          };
+
+          const executeVideoScan = () => {
+            if (!videoFileName.value) return;
+            isAnalyzingVideo.value = true;
+            videoAnalysisResult.value = null;
+
+            setTimeout(() => {
+              const name = videoFileName.value.toLowerCase();
+              let isPerfect = !name.includes("bad") && !name.includes("sag") && !name.includes("tilt");
+
+              if (name.includes("squat")) {
+                if (isPerfect) {
+                  videoAnalysisResult.value = {
+                    exerciseDetected: "Continuous Low Squat Alignment",
+                    score: 96,
+                    verified: true,
+                    jointAngles: { kneeFlexion: "92.4° - standard lower extension crease", spineAlignment: "0.4° - perfect spinal column alignment", hipJoint: "0.98 horizontal baseline balanced" },
+                    tips: ["Stable pressure spread across both landing deck magnets", "Abdominal stabilizers activated smoothly during ascension index"],
+                    explanation: "Perfect execution. Sensor overlay detects total joint alignment within acceptable tolerances. Score registered green."
+                  };
+                } else {
+                  videoAnalysisResult.value = {
+                    exerciseDetected: "Low Squat Articulating Alert",
+                    score: 45,
+                    verified: false,
+                    jointAngles: { kneeFlexion: "87.0° - borderline low crease", spineAlignment: "15.4° - dangerous spinal tilt deviation", hipJoint: "1.25 load shift offset" },
+                    tips: ["Gaze direct parallel to horizontal glass cockpit window to force back alignment", "Contract core armor locking handles during descent speed reduce", "Lower target velocity by 10%"],
+                    explanation: "Joint-crease alert! Telemetry scanner reports excessive sagittal spinal flexion of 15.4 degrees. High risk of mechanical disc pressure wear."
+                  };
+                }
+              } else {
+                // Default Pushups
+                if (isPerfect) {
+                  videoAnalysisResult.value = {
+                    exerciseDetected: "Zero-G Neutral Pushup Alignment",
+                    score: 94,
+                    verified: true,
+                    jointAngles: { kneeFlexion: "180° - balanced locked sensors", spineAlignment: "1.2° - perfect thoracic baseline shield", hipJoint: "179° - standard inline horizontal posture" },
+                    tips: ["Elbow stabilizer elements kept snug to hull chest", "Breathing intervals calibrated systematically"],
+                    explanation: "Excellent pushup mechanics registered. Zero-g center of gravity remain perfectly calibrated on line sensors."
+                  };
+                } else {
+                  videoAnalysisResult.value = {
+                    exerciseDetected: "Zero-G Pushup Hips Droop Alert",
+                    score: 52,
+                    verified: false,
+                    jointAngles: { kneeFlexion: "173° - passive support drop", spineAlignment: "9.5° - sagging abdominal balance line", hipJoint: "148° - pelvic plate drop crease" },
+                    tips: ["Contract lower core magnets to pull hips directly inline with chest thrust vectors", "Elevate scapular plates away from base floor deck"],
+                    explanation: "Kinematic alert! Pelvic chassis sag reduces loading stress of the target pectoral muscles by nearly 40%. Correct posture to resume."
+                  };
+                }
+              }
+              isAnalyzingVideo.value = false;
+            }, 1800);
+          };
+
+          // Extra details helpers
+          const habitNameById = (id) => {
+            const h = habits.value.find(hab => hab.id === id);
+            return h ? h.name : "Routine Therapy";
+          };
+
+          const formatDate = (dateStr) => {
+            const d = new Date(dateStr);
+            return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + d.toLocaleDateString([], { month: 'short', day: 'numeric' });
+          };
+
+          // Compute dynamic 7-Day XP completions
+          const chartDays = computed(() => {
+            const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            const counts = { Mon: 0, Tue: 0, Wed: 0, Thu: 0, Fri: 0, Sat: 0, Sun: 0 };
+            
+            // Loop through log completions this week to give live reactive bar indicators
+            logs.value.forEach(l => {
+              if (l.type === 'completion') {
+                const dayName = new Date(l.createdAt).toLocaleDateString([], { weekday: 'short' });
+                if (counts[dayName] !== undefined) {
+                  counts[dayName]++;
+                }
+              }
+            });
+
+            // If empty, add a few balanced presets for beautiful visualization
+            if (Object.values(counts).reduce((a,b)=>a+b, 0) === 0) {
+              counts.Mon = 2; counts.Tue = 4; counts.Wed = 1; counts.Thu = 3; counts.Fri = 5; counts.Sat = 2; counts.Sun = 1;
+            }
+
+            const maxVal = Math.max(...Object.values(counts), 1);
+            return weekdays.map(name => ({
+              name,
+              completions: counts[name],
+              height: Math.max(10, (counts[name] / maxVal) * 100)
+            }));
+          });
+
+          const totalWeeklyCompletions = computed(() => {
+            return chartDays.value.reduce((accum, d) => accum + d.completions, 0);
+          });
+
+          const commandGoals = computed(() => {
+            // Evaluates live metrics goals to show user sequence progress
+            const countMind = habits.value.filter(h => h.category === 'mind' && h.completions > 0).length;
+            const maxSeq = userProfile.value.bestStreak;
+            const bossesKilled = logs.value.filter(l => l.type === 'threat_defeated').length;
+
+            return [
+              { id: '1', requirement: 'ACTIVE LINK', title: 'DECISIVENESS CORE', description: 'Complete at least 2 mind-stabilizing routine operations today.', completed: countMind >= 2 },
+              { id: '2', requirement: 'SEQUENCE LEVEL', title: 'SEQUENCE HIGHSPEED', description: 'Reach or sustain a personal best operation streak of 5+ days.', completed: maxSeq >= 5 },
+              { id: '3', requirement: 'THREAT CONTROL', title: 'ORBITAL SAFETY GAUGE', description: 'Claim debris scrap salvage from neutralizing threat swarms once.', completed: bossesKilled >= 1 }
+            ];
+          });
+
+          return {
+            currentUser, isSandbox, loading, activeTab, toastMessage, toastType,
+            loginEmail, loginPassword, voiceInputText, journalContent, videoFileName,
+            isAnalyzingVoice, voiceAnalysisExplanation, isAnalyzingMood, moodResult, isAnalyzingVideo, videoAnalysisResult,
+            isPlayingMusic, randomBarHeights,
+            userProfile, habits, threats, logs, currentLevel, activeAvatarUrl, activeThreat,
+            selectedSimulatorLevel, selectedSuiteSpec, activeSuiteData, avatarStyleFilter,
+            shipItems, hasPurchased, shakingItemId, todayYMD, chartDays, totalWeeklyCompletions, commandGoals,
+            currentTier, tierStyle, teleportToLevel, missHabit, healOperativeHP, consecutiveMultiplier, permanentAchievements,
+            authGoogle, authWithEmail, enableSandboxMode, completeHabit, claimDefeatReward, forceLevelUp, purchaseItem, useDayBreak,
+            decryptThreat, engageThreat, togglePreference, resetOperativeSystem, signOutOperative,
+            submitVoiceLog, analyzeMentalState, triggerSuggestedHabit, loadVideoPreset, manualVideoUpload, executeVideoScan,
+            habitNameById, formatDate, getFilterForSuite: (lvl) => lvl >= 4 ? 'filter: hue-rotate(190deg) brightness(0.75) contrast(1.25) saturate(1.3);' : '',
+            toggleMusic: () => { isPlayingMusic.value = !isPlayingMusic.value; },
+            aiProcessingState, isHabitAiPowered, getAiProcessingMessage
+          };
+        }
+      }).mount('#app');
+    </script>
+  </body>
+</html>

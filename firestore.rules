@@ -1,0 +1,128 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net default-deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Validation definitions
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Validations for UserProfile
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['uid', 'email'])
+        && data.uid == request.auth.uid
+        && data.email == request.auth.token.email
+        && (data.get('displayName', '') is string && data.get('displayName', '').size() <= 128)
+        && (data.get('photoURL', '') is string && data.get('photoURL', '').size() <= 500)
+        && (data.get('xp', 0) is int && data.get('xp', 0) >= 0)
+        && (data.get('crystals', 0) is int && data.get('crystals', 0) >= 0)
+        && (data.get('perfectDays', 0) is int && data.get('perfectDays', 0) >= 0)
+        && (data.get('bestStreak', 0) is int && data.get('bestStreak', 0) >= 0)
+        && (data.get('purchasedItems', []) is list)
+        && (data.get('visualMode', 'dark') is string && (data.get('visualMode', 'dark') == 'dark' || data.get('visualMode', 'dark') == 'light'))
+        && (data.get('neuralComms', true) is bool);
+    }
+
+    // Validations for UserHabit
+    function isValidUserHabit(data) {
+      return data.keys().hasAll(['id', 'name', 'category', 'difficulty'])
+        && isValidId(data.id)
+        && (data.name is string && data.name.size() <= 200)
+        && (data.category is string && (data.category == 'mind' || data.category == 'health' || data.category == 'skill'))
+        && (data.difficulty is string && (data.difficulty == 'easy' || data.difficulty == 'medium' || data.difficulty == 'hard'))
+        && (data.get('streak', 0) is int && data.get('streak', 0) >= 0)
+        && (data.get('highStreak', 0) is int && data.get('highStreak', 0) >= 0)
+        && (data.get('completions', 0) is int && data.get('completions', 0) >= 0)
+        && (data.get('lastCompletedYMD', '') is string && data.get('lastCompletedYMD', '').size() <= 15);
+    }
+
+    // Validations for UserThreat
+    function isValidUserThreat(data) {
+      return data.keys().hasAll(['id', 'name', 'integrity', 'maxIntegrity'])
+        && isValidId(data.id)
+        && (data.name is string && data.name.size() <= 200)
+        && (data.get('level', 1) is int && data.get('level', 1) >= 1)
+        && (data.integrity is int && data.integrity >= 0 && data.integrity <= data.maxIntegrity)
+        && (data.maxIntegrity is int && data.maxIntegrity >= 0)
+        && (data.get('unlocked', false) is bool)
+        && (data.get('defeated', false) is bool)
+        && (data.get('xpUnlockRequirement', 0) is int && data.get('xpUnlockRequirement', 0) >= 0);
+    }
+
+    // Validations for UserLog
+    function isValidUserLog(data) {
+      return data.keys().hasAll(['id', 'type', 'title', 'createdAt'])
+        && isValidId(data.id)
+        && (data.type is string && (data.type == 'completion' || data.type == 'purchase' || data.type == 'system' || data.type == 'threat_defeated'))
+        && (data.title is string && data.title.size() <= 300)
+        && (data.get('xpEarned', 0) is int)
+        && (data.get('crystalsChange', 0) is int);
+    }
+
+    // Root paths for User Isolation
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUserProfile(incoming()) && incoming().createdAt is string && incoming().createdAt.size() <= 40 && incoming().updatedAt is string && incoming().updatedAt.size() <= 40;
+      allow update: if isOwner(userId) && isValidId(userId) && isValidUserProfile(incoming()) && (
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt is string && incoming().updatedAt.size() <= 40 &&
+        (
+          incoming().diff(existing()).affectedKeys().hasAny(['xp', 'crystals', 'perfectDays', 'bestStreak', 'purchasedItems', 'visualMode', 'neuralComms', 'updatedAt'])
+        )
+      );
+      allow delete: if isOwner(userId) && isValidId(userId);
+
+      // Subcollection: habits
+      match /habits/{habitId} {
+        allow get, list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(habitId) && isValidUserHabit(incoming()) && incoming().createdAt is string && incoming().createdAt.size() <= 40;
+        allow update: if isOwner(userId) && isValidId(habitId) && isValidUserHabit(incoming()) && (
+          incoming().createdAt == existing().createdAt &&
+          incoming().diff(existing()).affectedKeys().hasAny(['streak', 'highStreak', 'completions', 'lastCompletedYMD'])
+        );
+        allow delete: if isOwner(userId) && isValidId(habitId);
+      }
+
+      // Subcollection: threats
+      match /threats/{threatId} {
+        allow get, list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(threatId) && isValidUserThreat(incoming());
+        allow update: if isOwner(userId) && isValidId(threatId) && isValidUserThreat(incoming()) && (
+          incoming().diff(existing()).affectedKeys().hasAny(['integrity', 'unlocked', 'defeated'])
+        );
+        allow delete: if isOwner(userId) && isValidId(threatId);
+      }
+
+      // Subcollection: logs
+      match /logs/{logId} {
+        allow get, list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(logId) && isValidUserLog(incoming()) && incoming().createdAt is string && incoming().createdAt.size() <= 40;
+        allow update: if false; // Historical logs are fundamentally immutable
+        allow delete: if isOwner(userId) && isValidId(logId);
+      }
+    }
+  }
+}

@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Geist:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-surface-container-highest: #343538;
+  --color-on-secondary-container: #cbade2;
+  --color-surface-container: #1e1f23;
+  --color-primary-fixed: #d8e2ff;
+  --color-surface-container-low: #1a1b1f;
+  --color-primary: #adc6ff;
+  --color-error-container: #93000a;
+  --color-inverse-on-surface: #2f3034;
+  --color-on-surface-variant: #c4c6d0;
+  --color-secondary: #d9bbf1;
+  --color-surface-container-high: #292a2e;
+  --color-primary-fixed-dim: #adc6ff;
+  --color-on-secondary-fixed-variant: #543d6a;
+  --color-secondary-fixed: #f1dbff;
+  --color-on-background: #e3e2e7;
+  --color-outline-variant: #44474f;
+  --color-secondary-fixed-dim: #d9bbf1;
+  --color-inverse-surface: #e3e2e7;
+  --color-outline: #8e909a;
+  --color-on-primary-fixed: #001a41;
+  --color-on-error-container: #ffdad6;
+  --color-surface: #121317;
+  --color-tertiary-container: #471600;
+  --color-surface-bright: #38393d;
+  --color-on-primary-fixed-variant: #2b4678;
+  --color-inverse-primary: #445e91;
+  --color-surface-container-lowest: #0d0e11;
+  --color-on-tertiary-container: #c67a58;
+  --color-background: #121317;
+  --color-tertiary-fixed: #ffdbcd;
+  --color-on-tertiary-fixed-variant: #71361a;
+  --color-primary-container: #002455;
+  --color-tertiary-fixed-dim: #ffb597;
+  --color-on-secondary-fixed: #27103b;
+  --color-on-primary: #102f60;
+  --color-on-surface: #e3e2e7;
+  --color-tertiary: #ffb597;
+  --color-surface-dim: #121317;
+  --color-on-error: #690005;
+  --color-secondary-container: #573f6c;
+  --color-on-secondary: #3d2652;
+  --color-on-primary-container: #738dc3;
+  --color-surface-tint: #adc6ff;
+  --color-error: #ffb4ab;
+  --color-on-tertiary: #552006;
+  --color-on-tertiary-fixed: #360f00;
+  --color-surface-variant: #343538;
+}
+
+body {
+  background-color: #121317;
+  color: #e3e2e7;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.light {
+  background-color: #f4f5f9;
+  color: #1a1b1f;
+}
+
+.grain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuAvMluc9R3SHxuxR5kL77Tl8BKzFBoIcuPQIm1d7LPg8m6zVQxTKUrSUKTZOp8I7-1NJ2ld3AqCrZeZwGLXrDttOep9fVsBsbsdgB3APHGcaosccMRITmouOBiY9KAaGmJ4EK_WyNPH9g6pnpbq7Zslqw07tKDJWemwoFv7g_qeYZrD9HIbQ45FDdFXWJTi739j1yjg3iR2IoOibcI1F87p604h0fE5mxrcu-lZRnIBRQFVHF2laTx85Z-CJoeRnkORwTdoCyDeZJc);
+}
+
+.xp-bar-scanner {
+  position: relative;
+  overflow: hidden;
+}
+
+.xp-bar-scanner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(139, 233, 253, 0.4), transparent);
+  animation: scan 3s infinite linear;
+}
+
+@keyframes scan {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+.glass-card {
+  background: linear-gradient(135deg, rgba(11, 16, 32, 0.8) 0%, rgba(22, 28, 46, 0.8) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(173, 198, 255, 0.1);
+}
+
+.light .glass-card {
+  background: linear-gradient(135deg, rgba(235, 238, 245, 0.9) 0%, rgba(255, 255, 255, 0.9) 100%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.glow-accent {
+  box-shadow: 0 0 15px rgba(139, 233, 253, 0.2);
+}
+
+.hexagon-shape {
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(139, 233, 253, 0.1), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shake-animation {
+  animation: shake 0.2s ease-in-out 0s 2;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}

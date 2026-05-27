@@ -1,0 +1,6 @@
+{
+  "name": "Habit Hustle",
+  "description": "A gamified habit-tracking application featuring interactive space Battles, customized orbital cosmetics, and real-time synchronization via Firebase.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
